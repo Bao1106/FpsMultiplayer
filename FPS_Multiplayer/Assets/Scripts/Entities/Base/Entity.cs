@@ -1,6 +1,6 @@
 using System;
 using Entities.Soldier;
-using Interface;
+using Services;
 using UnityEngine;
 
 namespace Entities.Base
@@ -33,7 +33,7 @@ namespace Entities.Base
             look.EntityLook();
         }
 
-        protected void Start()
+        protected virtual void Start()
         {
             if (Camera.main != null) 
                 Camera.main.enabled = false;
