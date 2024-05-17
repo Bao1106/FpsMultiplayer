@@ -10,10 +10,17 @@ namespace Entities.Soldier
         [SerializeField] private bool isCursorLocked;
 
         private Quaternion eyesCenter;
+        private Camera soldierEyes;
+        private float baseFOV;
+
+        public float BaseFOV => baseFOV;
+        public Camera SoldierEyes => soldierEyes;
         
         public void SetupEyes()
         {
             eyesCenter = eyes.localRotation;
+            soldierEyes = eyes.GetComponent<Camera>();
+            baseFOV = soldierEyes.fieldOfView;
         }
 
         public void EntityLook()

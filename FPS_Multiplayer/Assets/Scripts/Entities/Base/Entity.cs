@@ -1,4 +1,5 @@
 using System;
+using Defines;
 using Entities.Soldier;
 using Services;
 using UnityEngine;
@@ -7,32 +8,19 @@ namespace Entities.Base
 {
     public class Entity : MonoBehaviour, IEntity
     {
-        [SerializeField] private Look look;
-        [SerializeField] private float speed;
-        
-        private static readonly int IsMoving = Animator.StringToHash("IsMoving");
+        [SerializeField] private float speed, sprintModifier, jumpForce;
 
-        public Rigidbody Rig { get; set; }
+        protected float Speed => speed;
+        protected float SprintModifier => sprintModifier;
+        protected float JumpForce => jumpForce;
         
+        public Rigidbody Rig { get; set; }
         public Animator Animator { get; set; }
 
-        public void Move()
-        {
-            var hMove = Input.GetAxisRaw("Horizontal");
-            var vMove = Input.GetAxisRaw("Vertical");
-            var direction = new Vector3(hMove, 0, vMove).normalized;
-            var isMove = hMove != 0 || vMove != 0;
-            
-            Rig.velocity = transform.TransformDirection(direction) * (speed * Time.deltaTime);
-            
-            Animator.SetBool(IsMoving, isMove);
-        }
-
-        public void Look()
-        {
-            look.EntityLook();
-        }
-
+        public void Look() {}
+        public void Jump() {}
+        public void Move() {}
+        
         protected virtual void Start()
         {
             if (Camera.main != null) 
@@ -40,13 +28,8 @@ namespace Entities.Base
             
             Rig = GetComponent<Rigidbody>();
             Animator = GetComponent<Animator>();
-            look.SetupEyes();
         }
 
-        protected void FixedUpdate()
-        {
-            Look();
-            Move();
-        }
+        protected virtual void FixedUpdate() { }
     }
 }

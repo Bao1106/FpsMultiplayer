@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Services
+namespace Defines
 {
     public interface IEntity
     {
@@ -9,5 +9,6 @@ namespace Services
 
         void Move();
         void Look();
+        void Jump();
     }
 }
