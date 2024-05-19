@@ -63,12 +63,12 @@ namespace Entities.Soldier
                 if (!isJump)
                 {
                     Sprint(vMove, tmpSpeed => adjustSpeed = tmpSpeed);
-                    Animator.SetBool(IsMoving, isMove);
+                    //Animator.SetBool(IsMoving, isMove);
                     return;
                 }
                 
                 Rig.AddForce(Vector3.up * JumpForce);
-                Animator.SetBool(IsJumping, true);
+                //Animator.SetBool(IsJumping, true);
             });
 
             var soldierVelocity = transform.TransformDirection(direction) * (adjustSpeed * Time.deltaTime);

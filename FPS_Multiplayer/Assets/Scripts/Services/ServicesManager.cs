@@ -43,6 +43,7 @@ namespace Services
                 Debug.LogError($"ServicesManager.Register: Service of type {type.FullName} already registered");
             }
 
+            Debug.Log($"ServicesManager.Register: Service of type {type.FullName} register successfully");
             return this;
         }
         
