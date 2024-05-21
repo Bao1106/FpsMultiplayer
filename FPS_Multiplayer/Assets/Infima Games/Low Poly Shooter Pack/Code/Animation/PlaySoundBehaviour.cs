@@ -2,6 +2,7 @@
 
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 using AudioSettings = Infima_Games.Low_Poly_Shooter_Pack.Code.Services.AudioSettings;
 
@@ -37,8 +38,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
 
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            //Try grab a reference to the sound managing service.
-            audioManagerService ??= ServiceLocator.Current.Get<IAudioManagerService>();
+            ServiceLocator.Global.Get(out audioManagerService);
 
             //Play!
             audioManagerService?.PlayOneShot(clip, settings);

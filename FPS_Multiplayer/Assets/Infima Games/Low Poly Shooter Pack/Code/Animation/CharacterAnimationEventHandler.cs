@@ -3,6 +3,7 @@
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Character;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation			
@@ -19,14 +20,18 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
         /// </summary>
         private CharacterBehaviour playerCharacter;
 
+		private IGameModeService gameModeService;
+		
 		#endregion
 
 		#region UNITY
 
 		private void Awake()
 		{
+			ServiceLocator.For(this).Get(out gameModeService);
+			
 			//Grab a reference to the character component.
-			playerCharacter = ServiceLocator.Current.Get<IGameModeService>().GetPlayerCharacter();
+			playerCharacter = gameModeService.GetPlayerCharacter();
 		}
 
 		#endregion

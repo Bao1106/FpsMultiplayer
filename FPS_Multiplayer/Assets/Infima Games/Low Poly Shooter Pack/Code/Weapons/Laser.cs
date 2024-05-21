@@ -2,6 +2,7 @@
 
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 using AudioSettings = Infima_Games.Low_Poly_Shooter_Pack.Code.Services.AudioSettings;
 
@@ -76,6 +77,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons
         /// </summary>
         private Transform beamParent;
 
+        private IAudioManagerService audioManagerService;
+        
         #endregion
         
         #region GETTERS
@@ -110,7 +113,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons
             
             //Plays a little sound now that we're toggling this laser!
             if(toggleClip != null)
-                ServiceLocator.Current.Get<IAudioManagerService>().PlayOneShot(toggleClip, toggleAudioSettings);
+                audioManagerService.PlayOneShot(toggleClip, toggleAudioSettings);
         }
         /// <summary>
         /// Reapply.
@@ -146,6 +149,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons
             
             //Cache beam parent.
             beamParent = laserTransform.parent;
+
+            ServiceLocator.For(this).Get(out audioManagerService);
         }
         /// <summary>
         /// Update.

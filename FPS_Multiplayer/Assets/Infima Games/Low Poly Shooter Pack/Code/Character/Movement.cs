@@ -4,6 +4,7 @@ using System.Collections;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
@@ -166,6 +167,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
         /// Stores the Time.time value when the character last jumped.
         /// </summary>
         private float lastJumpTime;
+
+        private IGameModeService gameModeService;
         
         #endregion
 
@@ -176,8 +179,10 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
         /// </summary>
         protected override void Awake()
         {
+            ServiceLocator.For(this).Get(out gameModeService);
+            
             //Get Player Character.
-            playerCharacter = ServiceLocator.Current.Get<IGameModeService>().GetPlayerCharacter();
+            playerCharacter = gameModeService.GetPlayerCharacter();
         }
         /// Initializes the FpsController on start.
         protected override void Start()

@@ -3,6 +3,7 @@
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Character;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Camera
@@ -56,6 +57,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Camera
         /// </summary>
         private Quaternion rotationCamera;
 
+        private IGameModeService gameModeService;
+        
         #endregion
         
         #region UNITY
@@ -67,9 +70,11 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Camera
         {
             if (UnityEngine.Camera.main != null) 
                 UnityEngine.Camera.main.enabled = false;
+
+            ServiceLocator.For(this).Get(out gameModeService);
             
             //Get Player Character.
-            playerCharacter = ServiceLocator.Current.Get<IGameModeService>().GetPlayerCharacter();       
+            playerCharacter = gameModeService.GetPlayerCharacter();       
             
             //Cache the character's initial rotation.
             rotationCharacter = playerCharacter.transform.localRotation;

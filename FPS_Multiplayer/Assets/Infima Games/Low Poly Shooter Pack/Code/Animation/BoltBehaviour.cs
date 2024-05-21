@@ -3,6 +3,7 @@
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Character;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
@@ -24,6 +25,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
 		/// </summary>
 		private InventoryBehaviour playerInventoryBehaviour;
 
+		private IGameModeService gameModeService;
+
 		#endregion
 
 		#region UNITY
@@ -33,8 +36,10 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
 		/// </summary>
 		public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 		{
+			ServiceLocator.Global.Get(out gameModeService);
+			
 			//We need to get the character component.
-			playerCharacter ??= ServiceLocator.Current.Get<IGameModeService>().GetPlayerCharacter();
+			playerCharacter ??= gameModeService.GetPlayerCharacter();
 
 			//Get Inventory.
 			playerInventoryBehaviour ??= playerCharacter.GetInventory();

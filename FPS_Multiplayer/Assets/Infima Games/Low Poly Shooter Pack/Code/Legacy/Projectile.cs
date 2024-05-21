@@ -3,6 +3,7 @@
 using System.Collections;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -31,10 +32,12 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Legacy
 		public Transform[] dirtImpactPrefabs;
 		public Transform[] concreteImpactPrefabs;
 
+		private IGameModeService gameModeService;
+        
 		private void Start()
 		{
 			//Grab the game mode service, we need it to access the player character!
-			var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+			ServiceLocator.For(this).Get(out gameModeService); 
 			//Ignore the main player character's collision. A little hacky, but it should work.
 			Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(),
 				GetComponent<Collider>());

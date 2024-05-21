@@ -4,6 +4,7 @@ using Infima_Games.Low_Poly_Shooter_Pack.Code.Character;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
@@ -44,7 +45,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
         protected virtual void Awake()
         {
             //Get Game Mode Service. Very useful to get Game Mode references.
-            gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+            ServiceLocator.For(this).Get(out gameModeService);
             
             //Get Player Character.
             characterBehaviour = gameModeService.GetPlayerCharacter();

@@ -4,6 +4,7 @@ using Infima_Games.Low_Poly_Shooter_Pack.Code.Character;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Utilities;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 using AudioSettings = Infima_Games.Low_Poly_Shooter_Pack.Code.Services.AudioSettings;
 
@@ -70,6 +71,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
         /// </summary>
         private IAudioManagerService audioManagerService;
 
+        private IGameModeService gameModeService;
+        
         #endregion
         
         #region UNITY
@@ -79,8 +82,10 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
         /// </summary>
         public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
+            ServiceLocator.Global.Get(out gameModeService).Get(out audioManagerService);
+            
             //We need to get the character component.
-            playerCharacter ??= ServiceLocator.Current.Get<IGameModeService>().GetPlayerCharacter();
+            playerCharacter ??= gameModeService.GetPlayerCharacter();
 
             //Get Inventory.
             playerInventory ??= playerCharacter.GetInventory();
@@ -88,9 +93,6 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Animation
             //Try to get the equipped weapon's Weapon component.
             if (!(playerInventory.GetEquipped() is { } weaponBehaviour))
                 return;
-            
-            //Try grab a reference to the sound managing service.
-            audioManagerService ??= ServiceLocator.Current.Get<IAudioManagerService>();
 
             #region Select Correct Clip To Play
 

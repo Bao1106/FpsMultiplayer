@@ -3,6 +3,7 @@
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Character;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Services;
 using InfimaGames.LowPolyShooterPack;
+using Services;
 using UnityEngine;
 using AudioSettings = Infima_Games.Low_Poly_Shooter_Pack.Code.Services.AudioSettings;
 
@@ -190,6 +191,9 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons
         /// The GameModeService used in this game!
         /// </summary>
         private IGameModeService gameModeService;
+
+        private IAudioManagerService audioManagerService;
+        
         /// <summary>
         /// The main player character behaviour component.
         /// </summary>
@@ -212,7 +216,9 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons
             attachmentManager = GetComponent<WeaponAttachmentManagerBehaviour>();
 
             //Cache the game mode service. We only need this right here, but we'll cache it in case we ever need it again.
-            gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+            ServiceLocator.For(this)
+                .Get(out gameModeService)
+                .Get(out audioManagerService);
             //Cache the player character.
             characterBehaviour = gameModeService.GetPlayerCharacter();
             //Cache the world camera. We use this in line traces.
@@ -411,7 +417,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons
             animator.SetBool(boolName, true);
             
             //Try Play Reload Sound.
-            ServiceLocator.Current.Get<IAudioManagerService>().PlayOneShot(HasAmmunition() ? audioClipReload : audioClipReloadEmpty, new AudioSettings(1.0f, 0.0f, false));
+            audioManagerService.PlayOneShot(HasAmmunition() ? audioClipReload : audioClipReloadEmpty, new AudioSettings(1.0f, 0.0f, false));
             
             //Play Reload Animation.
             animator.Play(cycledReload ? "Reload Open" : (HasAmmunition() ? "Reload" : "Reload Empty"), 0, 0.0f);
