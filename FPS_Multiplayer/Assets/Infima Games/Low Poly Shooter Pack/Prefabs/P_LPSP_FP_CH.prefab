@@ -261,7 +261,7 @@ Camera:
     height: 1
   near clip plane: 0.01
   far clip plane: 1000
-  field of view: 90
+  field of view: 50
   orthographic: 0
   orthographic size: 5
   m_Depth: -2
@@ -1209,7 +1209,7 @@ MonoBehaviour:
   runningInterpolationSpeed: 5
   aimingSpeedMultiplier: 0.9
   characterAnimator: {fileID: 3320314160785962872}
-  fieldOfView: 95
+  fieldOfView: 75
   fieldOfViewRunningMultiplier: 1.1
   fieldOfViewWeapon: 65
   audioClipsMelee:
