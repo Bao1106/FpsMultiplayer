@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.inspiaaa.unityhfsm": {
+      "version": "https://github.com/Inspiaaa/UnityHFSM.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5f0f7fdf1fadbc3c20bc10bcbef56415e037fc3d"
+    },
     "com.unity.ai.navigation": {
       "version": "1.1.5",
       "depth": 0,

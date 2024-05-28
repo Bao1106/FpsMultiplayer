@@ -28,22 +28,22 @@ namespace GOAP.Behaviours
 
         private void OnEnable()
         {
-            agentBehaviour.Events.OnTargetChanged += EventsOnOnTargetChanged;
-            agentBehaviour.Events.OnTargetOutOfRange += EventsOnOnTargetOutOfRange;
+            agentBehaviour.Events.OnTargetChanged += EventsOnTargetChanged;
+            agentBehaviour.Events.OnTargetOutOfRange += EventsOnTargetOutOfRange;
         }
 
         private void OnDisable()
         {
-            agentBehaviour.Events.OnTargetChanged -= EventsOnOnTargetChanged;
-            agentBehaviour.Events.OnTargetOutOfRange -= EventsOnOnTargetOutOfRange;
+            agentBehaviour.Events.OnTargetChanged -= EventsOnTargetChanged;
+            agentBehaviour.Events.OnTargetOutOfRange -= EventsOnTargetOutOfRange;
         }
 
-        private void EventsOnOnTargetOutOfRange(ITarget target)
+        private void EventsOnTargetOutOfRange(ITarget target)
         {
             animator.SetBool(Walk, false);
         }
 
-        private void EventsOnOnTargetChanged(ITarget target, bool inRange)
+        private void EventsOnTargetChanged(ITarget target, bool inRange)
         {
             currentTarget = target;
             lastPos = currentTarget.Position;
