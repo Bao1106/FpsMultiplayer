@@ -9,6 +9,7 @@ namespace GOAP.Config
     public class GoapDI : GoapConfigInitializerBase, IGoapInjector
     {
         public AttackConfig attackConfig;
+        public WanderConfig wanderConfig;
         
         public override void InitConfig(GoapConfig config)
         {

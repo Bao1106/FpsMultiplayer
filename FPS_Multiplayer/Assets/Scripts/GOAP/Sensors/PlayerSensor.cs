@@ -1,4 +1,5 @@
-﻿using Entities.Player;
+﻿using Entities.Entity;
+using Entities.Player;
 using UnityEngine;
 
 namespace GOAP.Sensors

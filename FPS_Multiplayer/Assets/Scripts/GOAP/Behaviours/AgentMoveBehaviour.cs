@@ -17,7 +17,8 @@ namespace GOAP.Behaviours
         private Vector3 lastPos;
 
         private ITarget currentTarget;
-        private static readonly int Walk = Animator.StringToHash("Walk");
+        private static readonly int walk = Animator.StringToHash("Walk");
+        private static readonly int idle = Animator.StringToHash("Idle");
 
         private void Awake()
         {
@@ -40,7 +41,8 @@ namespace GOAP.Behaviours
 
         private void EventsOnTargetOutOfRange(ITarget target)
         {
-            animator.SetBool(Walk, false);
+            animator.SetBool(walk, false);
+            //animator.SetTrigger(idle);
         }
 
         private void EventsOnTargetChanged(ITarget target, bool inRange)
@@ -48,7 +50,8 @@ namespace GOAP.Behaviours
             currentTarget = target;
             lastPos = currentTarget.Position;
             navMeshAgent.SetDestination(target.Position);
-            animator.SetBool(Walk, true);
+            //animator.SetBool(walk, true);
+            //animator.SetTrigger(walk);
         }
 
         private void Update()
@@ -61,7 +64,8 @@ namespace GOAP.Behaviours
                 navMeshAgent.SetDestination(currentTarget.Position);    
             }
             
-            animator.SetBool(Walk, navMeshAgent.velocity.magnitude > 0.1f);
+            animator.SetBool(walk, navMeshAgent.velocity.magnitude > 0.1f);
+            //animator.SetTrigger(navMeshAgent.velocity.magnitude > 0.1f ? walk : idle);
         }
     }
 }

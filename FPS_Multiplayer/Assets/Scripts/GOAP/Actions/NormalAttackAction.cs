@@ -25,11 +25,11 @@ namespace GOAP.Actions
             var shouldAttack = data.Target != null &&
                                Vector3.Distance(data.Target.Position, agent.transform.position) <=
                                attackConfig.normalAttackRadius;
-
             data.Animator.SetBool(AttackData.Attack, shouldAttack);
 
             if (shouldAttack)
             {
+                //data.Animator.SetTrigger(AttackData.Attack);
                 agent.transform.LookAt(data.Target.Position);
             }
 
@@ -38,7 +38,8 @@ namespace GOAP.Actions
 
         public override void End(IMonoAgent agent, AttackData data)
         {
-            data.Animator.SetBool(AttackData.Attack, false);
+            //data.Animator.SetBool(AttackData.Attack, false);
+            //data.Animator.SetTrigger(AttackData.Walk);
         }
 
         public void Inject(GoapDI injector)

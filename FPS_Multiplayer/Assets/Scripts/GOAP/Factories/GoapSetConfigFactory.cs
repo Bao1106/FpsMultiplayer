@@ -10,7 +10,6 @@ using GOAP.Sensors;
 using GOAP.Targets;
 using GOAP.WorldKeys;
 using UnityEngine;
-using IsWandering = Demos.Complex.WorldKeys.IsWandering;
 
 namespace GOAP.Factories
 {

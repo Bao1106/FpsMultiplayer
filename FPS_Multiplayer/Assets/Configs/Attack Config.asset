@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e693dbca10ef4784a352df953c80ca67, type: 3}
   m_Name: Attack Config
   m_EditorClassIdentifier: 
-  sensorRadius: 10
-  normalAttackRadius: 3
+  sensorRadius: 8
+  normalAttackRadius: 2
   attackDelay: 1
   normalAttackCost: 1
   attackLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
