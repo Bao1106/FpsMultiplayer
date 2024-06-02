@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Attack Config
   m_EditorClassIdentifier: 
   sensorRadius: 8
-  normalAttackRadius: 2
+  normalAttackRadius: 1
   attackDelay: 1
-  normalAttackCost: 1
+  normalAttackCost: 2
   attackLayer:
     serializedVersion: 2
     m_Bits: 128

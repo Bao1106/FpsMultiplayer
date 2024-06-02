@@ -26,6 +26,7 @@ namespace GOAP.Actions
                                Vector3.Distance(data.Target.Position, agent.transform.position) <=
                                attackConfig.normalAttackRadius;
             data.Animator.SetBool(AttackData.Attack, shouldAttack);
+            data.Animator.speed = 3f;
 
             if (shouldAttack)
             {

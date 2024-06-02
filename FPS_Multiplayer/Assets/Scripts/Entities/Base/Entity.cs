@@ -3,18 +3,20 @@ using Entities.Player;
 using Interfaces;
 using Services;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Entities.Base
 {
     public class Entity : MonoBehaviour, IEntity
     {
-        public float Health { get; set; } = 100;
-        
+        [SerializeField] protected Observer<int> entityHealth;
+        public static int MaxHealth { get; set; }
         public CharacterController CharacterController { get; set; }
-
-        private void Start()
+        
+        protected virtual void Awake()
         {
             CharacterController = GetComponent<CharacterController>();
+            entityHealth.Invoke();
         }
     }
 }

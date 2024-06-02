@@ -1,3 +1,4 @@
+using System;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.Events;
@@ -5,6 +6,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Services
 {
+    [Serializable]
     public class Observer<T>
     {
         [SerializeField] private T value;

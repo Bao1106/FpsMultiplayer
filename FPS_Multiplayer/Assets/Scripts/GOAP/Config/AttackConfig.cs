@@ -8,7 +8,7 @@ namespace GOAP.Config
         public float sensorRadius = 5;
         public float normalAttackRadius = 1f;
         public float attackDelay = 1f;
-        public int normalAttackCost = 1;
+        public int normalAttackCost = 2;
         public LayerMask attackLayer;
     }
 }

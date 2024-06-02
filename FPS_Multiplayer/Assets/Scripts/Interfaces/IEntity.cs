@@ -1,10 +1,11 @@
+using Services;
 using UnityEngine;
 
 namespace Interfaces
 {
     public interface IEntity
     {
-        float Health { get; set; }
+        static int MaxHealth { get; set; }
         CharacterController CharacterController { get; set; }
     }
 }
