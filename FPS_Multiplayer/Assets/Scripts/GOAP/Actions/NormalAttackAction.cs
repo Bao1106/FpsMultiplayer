@@ -2,6 +2,7 @@
 using CrashKonijn.Goap.Classes;
 using CrashKonijn.Goap.Enums;
 using CrashKonijn.Goap.Interfaces;
+using Events;
 using GOAP.Config;
 using Interfaces;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace GOAP.Actions
             data.Timer -= context.DeltaTime;
             var shouldAttack = data.Target != null &&
                                Vector3.Distance(data.Target.Position, agent.transform.position) <=
-                               attackConfig.normalAttackRadius;
+                               attackConfig.normalAttackRadius && StaticEvents.PlayerHealth.Value > 0;
             data.Animator.SetBool(AttackData.Attack, shouldAttack);
             data.Animator.speed = 3f;
 

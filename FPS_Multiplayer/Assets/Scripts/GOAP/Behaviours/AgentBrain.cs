@@ -1,5 +1,6 @@
 ﻿using System;
 using CrashKonijn.Goap.Behaviours;
+using Events;
 using GOAP.Config;
 using GOAP.Goals;
 using GOAP.Sensors;

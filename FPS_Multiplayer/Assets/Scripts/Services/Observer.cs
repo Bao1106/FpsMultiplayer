@@ -34,7 +34,6 @@ namespace Services
 
         public void Invoke()
         {
-            Debug.Log($"Invoking: {onValueChanged.GetPersistentEventCount()} listeners");
             onValueChanged.Invoke(value);
         }
 

@@ -12,16 +12,26 @@ namespace Entities.Entity
         protected override void Awake()
         {
             MaxHealth = 100;
-            entityHealth = new Observer<int>(MaxHealth);
-
-            StaticEvents.PlayerHealth = entityHealth;
+            InitObserver();
             base.Awake();
         }
 
+        private void InitObserver()
+        {
+            entityHealth = new Observer<int>(MaxHealth);
+            IsDamaged = new Observer<bool>(false);
+
+            StaticEvents.PlayerHealth = entityHealth;
+            StaticEvents.IsDamaged = IsDamaged;
+        }
+        
         private void OnDamage(int damage)
         {
-            if(entityHealth.Value > 0)
+            if (entityHealth.Value > 0)
+            {
                 entityHealth.Value -= damage;
+                IsDamaged.Value = true;
+            }
         }
         
         private void OnTriggerEnter(Collider other)

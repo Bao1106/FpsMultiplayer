@@ -10,6 +10,9 @@ namespace Entities.Base
     public class Entity : MonoBehaviour, IEntity
     {
         [SerializeField] protected Observer<int> entityHealth;
+        
+        protected Observer<bool> IsDamaged;
+        
         public static int MaxHealth { get; set; }
         public CharacterController CharacterController { get; set; }
         
@@ -17,6 +20,7 @@ namespace Entities.Base
         {
             CharacterController = GetComponent<CharacterController>();
             entityHealth.Invoke();
+            IsDamaged.Invoke();
         }
     }
 }

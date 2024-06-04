@@ -1,6 +1,7 @@
 ﻿using System;
 using CrashKonijn.Goap.Behaviours;
 using CrashKonijn.Goap.Interfaces;
+using Events;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -58,7 +59,7 @@ namespace GOAP.Behaviours
         {
             if (currentTarget == null) return;
 
-            if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos))
+            if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && StaticEvents.PlayerHealth.Value > 0)
             {
                 lastPos = currentTarget.Position;
                 navMeshAgent.SetDestination(currentTarget.Position);    
