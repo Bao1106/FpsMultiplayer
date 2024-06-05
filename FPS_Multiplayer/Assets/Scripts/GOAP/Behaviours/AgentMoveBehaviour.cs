@@ -17,8 +17,11 @@ namespace GOAP.Behaviours
         private Animator animator;
         private AgentBehaviour agentBehaviour;
         private Vector3 lastPos;
+        private Vector2 smoothDeltaPos, smoothVelocity;
+        
         private float agentVelocity = 0.1f;
         private bool isUserInRange;
+        
         private readonly float agentAcceleration = 0.1f;
         private readonly float agentDecceleration = 0.4f;
         
@@ -31,7 +34,19 @@ namespace GOAP.Behaviours
             navMeshAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
             agentBehaviour = GetComponent<AgentBehaviour>();
+
+            animator.applyRootMotion = true;
+            navMeshAgent.updatePosition = false;
+            navMeshAgent.updateRotation = true;
         }
+
+        /*private void OnAnimatorMove()
+        {
+            var rootPos = animator.rootPosition;
+            rootPos.y = navMeshAgent.nextPosition.y;
+            transform.position = rootPos;
+            navMeshAgent.nextPosition = rootPos;
+        }*/
 
         private void OnEnable()
         {
@@ -54,8 +69,15 @@ namespace GOAP.Behaviours
         private void EventsOnTargetChanged(ITarget target, bool inRange)
         {
             currentTarget = target;
+
             lastPos = currentTarget.Position;
             navMeshAgent.SetDestination(target.Position);
+
+            if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
+            {
+                animator.SetFloat(velocity, 0.05f);
+            }
+            
             //animator.SetBool(walk, true);
             //animator.SetTrigger(walk);
         }
@@ -63,24 +85,48 @@ namespace GOAP.Behaviours
         private void Update()
         {
             if (currentTarget == null) return;
-
+            
             if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && StaticEvents.PlayerHealth.Value > 0)
             {
                 lastPos = currentTarget.Position;
                 navMeshAgent.SetDestination(currentTarget.Position);
             }
             
-            if (StaticEvents.IsUserInRange && agentVelocity < 1.0f)
-                agentVelocity += Time.deltaTime * agentAcceleration;
-            else if (!StaticEvents.IsUserInRange && agentVelocity > 0.1f)
+            switch (StaticEvents.IsUserInRange)
             {
-                agentVelocity -= Time.deltaTime * agentDecceleration;
-                animator.speed = 1f;
+                case true when agentVelocity < 1.0f:
+                    agentVelocity += Time.deltaTime * agentAcceleration;
+                    break;
+                case false when agentVelocity > 0.1f:
+                    agentVelocity -= Time.deltaTime * agentDecceleration;
+                    break;
             }
 
             //animator.SetBool(walk, navMeshAgent.velocity.magnitude > 0.1f);
             
-            animator.SetFloat(velocity, agentVelocity);
+            var worldDeltaPos = navMeshAgent.nextPosition - transform.position;
+            worldDeltaPos.y = 0;
+
+            var dx = Vector3.Dot(transform.right, worldDeltaPos);
+            var dy = Vector3.Dot(transform.forward, worldDeltaPos);
+            var deltaPos = new Vector2(dx, dy);
+
+            var smooth = Mathf.Min(1, Time.deltaTime / 0.1f);
+            smoothDeltaPos = Vector2.Lerp(smoothDeltaPos, deltaPos, smooth);
+            smoothVelocity = smoothDeltaPos / Time.deltaTime;
+
+            var deltaMagnitude = worldDeltaPos.magnitude;
+            
+            animator.SetFloat(velocity, navMeshAgent.velocity.magnitude > 0.1f 
+                ? agentVelocity : 0.05f);
+            
+            if (deltaMagnitude > navMeshAgent.radius / 2f)
+            {
+                transform.position = Vector3
+                    .Lerp(animator.rootPosition,
+                        navMeshAgent.nextPosition,
+                        smooth);
+            }
         }
     }
 }

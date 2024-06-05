@@ -28,12 +28,10 @@ namespace GOAP.Actions
                                attackConfig.normalAttackRadius && StaticEvents.PlayerHealth.Value > 0;
 
             data.Animator.SetBool(AttackData.Attack, shouldAttack);
-            data.Animator.speed = 3f;
             if (shouldAttack)
             {
                 //data.Animator.SetTrigger(AttackData.Attack);
                 agent.transform.LookAt(data.Target.Position);
-                data.Animator.speed = 3f;
             }
 
             return data.Timer > 0 ? ActionRunState.Continue : ActionRunState.Stop;
