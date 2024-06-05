@@ -6,5 +6,6 @@ namespace Events
     {
         public static Observer<int> PlayerHealth;
         public static Observer<bool> IsDamaged;
+        public static bool IsUserInRange;
     }
 }

@@ -26,13 +26,14 @@ namespace GOAP.Actions
             var shouldAttack = data.Target != null &&
                                Vector3.Distance(data.Target.Position, agent.transform.position) <=
                                attackConfig.normalAttackRadius && StaticEvents.PlayerHealth.Value > 0;
+
             data.Animator.SetBool(AttackData.Attack, shouldAttack);
             data.Animator.speed = 3f;
-
             if (shouldAttack)
             {
                 //data.Animator.SetTrigger(AttackData.Attack);
                 agent.transform.LookAt(data.Target.Position);
+                data.Animator.speed = 3f;
             }
 
             return data.Timer > 0 ? ActionRunState.Continue : ActionRunState.Stop;

@@ -1,5 +1,6 @@
 ﻿using Entities.Entity;
 using Entities.Player;
+using Events;
 using UnityEngine;
 
 namespace GOAP.Sensors
@@ -24,6 +25,7 @@ namespace GOAP.Sensors
             if (other.TryGetComponent(out Player player))
             {
                 OnPlayerEnter?.Invoke(player.transform);
+                StaticEvents.IsUserInRange = true;
             }
         }
 
@@ -32,6 +34,7 @@ namespace GOAP.Sensors
             if (other.TryGetComponent(out Player player))
             {
                 OnPlayerExit?.Invoke(other.transform.position);
+                StaticEvents.IsUserInRange = false;
             }
         }
     }

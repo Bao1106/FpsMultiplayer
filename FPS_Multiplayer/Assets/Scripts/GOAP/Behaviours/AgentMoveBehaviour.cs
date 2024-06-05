@@ -12,14 +12,19 @@ namespace GOAP.Behaviours
     {
         [SerializeField] private float minMoveDistance = 0.25f;
         
+        private ITarget currentTarget;
         private NavMeshAgent navMeshAgent;
         private Animator animator;
         private AgentBehaviour agentBehaviour;
         private Vector3 lastPos;
-
-        private ITarget currentTarget;
+        private float agentVelocity = 0.1f;
+        private bool isUserInRange;
+        private readonly float agentAcceleration = 0.1f;
+        private readonly float agentDecceleration = 0.4f;
+        
         private static readonly int walk = Animator.StringToHash("Walk");
         private static readonly int idle = Animator.StringToHash("Idle");
+        private static readonly int velocity = Animator.StringToHash("Velocity");
 
         private void Awake()
         {
@@ -42,8 +47,8 @@ namespace GOAP.Behaviours
 
         private void EventsOnTargetOutOfRange(ITarget target)
         {
-            animator.SetBool(walk, false);
-            //animator.SetTrigger(idle);
+            //animator.SetBool(walk, false);
+            animator.SetFloat(velocity, 0.05f);
         }
 
         private void EventsOnTargetChanged(ITarget target, bool inRange)
@@ -62,11 +67,20 @@ namespace GOAP.Behaviours
             if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && StaticEvents.PlayerHealth.Value > 0)
             {
                 lastPos = currentTarget.Position;
-                navMeshAgent.SetDestination(currentTarget.Position);    
+                navMeshAgent.SetDestination(currentTarget.Position);
             }
             
-            animator.SetBool(walk, navMeshAgent.velocity.magnitude > 0.1f);
-            //animator.SetTrigger(navMeshAgent.velocity.magnitude > 0.1f ? walk : idle);
+            if (StaticEvents.IsUserInRange && agentVelocity < 1.0f)
+                agentVelocity += Time.deltaTime * agentAcceleration;
+            else if (!StaticEvents.IsUserInRange && agentVelocity > 0.1f)
+            {
+                agentVelocity -= Time.deltaTime * agentDecceleration;
+                animator.speed = 1f;
+            }
+
+            //animator.SetBool(walk, navMeshAgent.velocity.magnitude > 0.1f);
+            
+            animator.SetFloat(velocity, agentVelocity);
         }
     }
 }

@@ -18,18 +18,18 @@ namespace Entities.Entity
 
         private void InitObserver()
         {
-            entityHealth = new Observer<int>(MaxHealth);
+            EntityHealth = new Observer<int>(MaxHealth);
             IsDamaged = new Observer<bool>(false);
 
-            StaticEvents.PlayerHealth = entityHealth;
+            StaticEvents.PlayerHealth = EntityHealth;
             StaticEvents.IsDamaged = IsDamaged;
         }
         
         private void OnDamage(int damage)
         {
-            if (entityHealth.Value > 0)
+            if (EntityHealth.Value > 0)
             {
-                entityHealth.Value -= damage;
+                EntityHealth.Value -= damage;
                 IsDamaged.Value = true;
             }
         }

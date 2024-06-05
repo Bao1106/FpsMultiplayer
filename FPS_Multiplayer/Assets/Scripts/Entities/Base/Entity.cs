@@ -9,17 +9,16 @@ namespace Entities.Base
 {
     public class Entity : MonoBehaviour, IEntity
     {
-        [SerializeField] protected Observer<int> entityHealth;
-        
+        protected Observer<int> EntityHealth;
         protected Observer<bool> IsDamaged;
-        
-        public static int MaxHealth { get; set; }
+
+        protected static int MaxHealth { get; set; }
         public CharacterController CharacterController { get; set; }
         
         protected virtual void Awake()
         {
             CharacterController = GetComponent<CharacterController>();
-            entityHealth.Invoke();
+            EntityHealth.Invoke();
             IsDamaged.Invoke();
         }
     }
