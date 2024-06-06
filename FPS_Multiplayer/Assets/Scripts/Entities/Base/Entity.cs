@@ -1,9 +1,6 @@
-using System;
-using Entities.Player;
 using Interfaces;
 using Services;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Entities.Base
 {
@@ -12,7 +9,7 @@ namespace Entities.Base
         protected Observer<int> EntityHealth;
         protected Observer<bool> IsDamaged;
 
-        protected static int MaxHealth { get; set; }
+        public int MaxHealth { get; set; }
         public CharacterController CharacterController { get; set; }
         
         protected virtual void Awake()

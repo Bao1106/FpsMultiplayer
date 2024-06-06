@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace Entities.Player
+namespace Entities.Entity
 {
     public class Look : MonoBehaviour
     {

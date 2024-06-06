@@ -23,10 +23,8 @@ namespace GOAP.Behaviours
         private bool isUserInRange;
         
         private readonly float agentAcceleration = 0.1f;
-        private readonly float agentDecceleration = 0.4f;
+        private readonly float agentDeceleration = 0.4f;
         
-        private static readonly int walk = Animator.StringToHash("Walk");
-        private static readonly int idle = Animator.StringToHash("Idle");
         private static readonly int velocity = Animator.StringToHash("Velocity");
 
         private void Awake()
@@ -39,14 +37,6 @@ namespace GOAP.Behaviours
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = true;
         }
-
-        /*private void OnAnimatorMove()
-        {
-            var rootPos = animator.rootPosition;
-            rootPos.y = navMeshAgent.nextPosition.y;
-            transform.position = rootPos;
-            navMeshAgent.nextPosition = rootPos;
-        }*/
 
         private void OnEnable()
         {
@@ -98,7 +88,7 @@ namespace GOAP.Behaviours
                     agentVelocity += Time.deltaTime * agentAcceleration;
                     break;
                 case false when agentVelocity > 0.1f:
-                    agentVelocity -= Time.deltaTime * agentDecceleration;
+                    agentVelocity -= Time.deltaTime * agentDeceleration;
                     break;
             }
 
