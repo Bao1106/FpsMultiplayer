@@ -6492,6 +6492,8 @@ GameObject:
   - component: {fileID: 719566709}
   - component: {fileID: 719566711}
   - component: {fileID: 719566712}
+  - component: {fileID: 719566714}
+  - component: {fileID: 719566713}
   m_Layer: 0
   m_Name: Laucher
   m_TagString: Untagged
@@ -6557,6 +6559,30 @@ MonoBehaviour:
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: aa9daf341749b13419a827702acb6cc3, type: 2}
   m_BuildHeightMesh: 0
+--- !u!114 &719566713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719566708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 424e9d842c524b3a9a110156678e175d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &719566714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719566708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5626705e403642e46aa05b49a886ef31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &730843545
 GameObject:
   m_ObjectHideFlags: 0

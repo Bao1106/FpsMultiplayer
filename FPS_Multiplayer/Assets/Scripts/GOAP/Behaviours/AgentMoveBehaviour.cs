@@ -1,7 +1,8 @@
-﻿using System;
-using CrashKonijn.Goap.Behaviours;
+﻿using CrashKonijn.Goap.Behaviours;
 using CrashKonijn.Goap.Interfaces;
 using Events;
+using Interfaces;
+using Services.DependencyInjection;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +12,7 @@ namespace GOAP.Behaviours
     public class AgentMoveBehaviour : MonoBehaviour
     {
         [SerializeField] private float minMoveDistance = 0.25f;
+        [Inject] public IEntity Entity;
         
         private ITarget currentTarget;
         private NavMeshAgent navMeshAgent;
@@ -76,7 +78,7 @@ namespace GOAP.Behaviours
         {
             if (currentTarget == null) return;
             
-            if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && StaticEvents.PlayerHealth.Value > 0)
+            if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && Entity.EntityHealth.Value > 0)
             {
                 lastPos = currentTarget.Position;
                 navMeshAgent.SetDestination(currentTarget.Position);

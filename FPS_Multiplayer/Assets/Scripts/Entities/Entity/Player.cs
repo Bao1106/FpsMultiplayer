@@ -20,9 +20,6 @@ namespace Entities.Entity
         {
             EntityHealth = new Observer<int>(MaxHealth);
             IsDamaged = new Observer<bool>(false);
-
-            StaticEvents.PlayerHealth = EntityHealth;
-            StaticEvents.IsDamaged = IsDamaged;
         }
         
         private void OnDamage(int damage)

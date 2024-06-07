@@ -1,16 +1,22 @@
 using Interfaces;
 using Services;
+using Services.DependencyInjection;
 using UnityEngine;
 
 namespace Entities.Base
 {
-    public class Entity : MonoBehaviour, IEntity
+    public class Entity : MonoBehaviour, IEntity, IDependencyProvider
     {
-        protected Observer<int> EntityHealth;
-        protected Observer<bool> IsDamaged;
-
         public int MaxHealth { get; set; }
         public CharacterController CharacterController { get; set; }
+        public Observer<int> EntityHealth { get; set; }
+        public Observer<bool> IsDamaged { get; protected set; }
+
+        [Provide]
+        public IEntity ProviderEntity()
+        {
+            return this;
+        }
         
         protected virtual void Awake()
         {
