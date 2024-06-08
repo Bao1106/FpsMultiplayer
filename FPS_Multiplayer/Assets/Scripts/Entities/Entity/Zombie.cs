@@ -1,5 +1,6 @@
 ﻿using System;
 using Entities.Base;
+using GOAP.Sensors;
 using Unity.VisualScripting;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -10,6 +11,9 @@ namespace Entities.Entity
 {
     public class Zombie : Enemy
     {
+        public string zombieName;
+        public IPlayerSensor iPlayerSensor;
+        
         private static readonly int deadType = Animator.StringToHash("DeadType");
         private static readonly int dead = Animator.StringToHash("Dead");
         
@@ -30,7 +34,14 @@ namespace Entities.Entity
             Animator.SetFloat(deadType, deadValue);
             Animator.speed = 2f;
         }
-        
+
+        protected override void Awake()
+        {
+            zombieName = gameObject.name;
+            playerSensor.SetKey(zombieName);
+            base.Awake();
+        }
+
         protected override void Start()
         {
             EnemyHealth = 100;
@@ -50,5 +61,8 @@ namespace Entities.Entity
         {
             Destroy(gameObject);
         }
+        
+
+        public PlayerSensor GetSensor() => playerSensor;
     }
 }

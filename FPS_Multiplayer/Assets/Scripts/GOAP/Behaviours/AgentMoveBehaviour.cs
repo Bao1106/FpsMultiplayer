@@ -1,6 +1,8 @@
-﻿using CrashKonijn.Goap.Behaviours;
+﻿using System;
+using CrashKonijn.Goap.Behaviours;
 using CrashKonijn.Goap.Interfaces;
 using Events;
+using GOAP.Sensors;
 using Interfaces;
 using Services.DependencyInjection;
 using UnityEngine;
@@ -13,6 +15,7 @@ namespace GOAP.Behaviours
     {
         [SerializeField] private float minMoveDistance = 0.25f;
         [Inject] public IEntity Entity;
+        //[Inject] private IPlayerSensor playerSensor;
         
         private ITarget currentTarget;
         private NavMeshAgent navMeshAgent;
@@ -40,6 +43,17 @@ namespace GOAP.Behaviours
             navMeshAgent.updateRotation = true;
         }
 
+        private void Start()
+        {
+            //playerSensor.IsUserInRange.AddListener(OnUpdateSensor);
+            OnUpdateSensor(false);
+        }
+
+        private void OnUpdateSensor(bool userInRange)
+        {
+            isUserInRange = userInRange;
+        }
+        
         private void OnEnable()
         {
             agentBehaviour.Events.OnTargetChanged += EventsOnTargetChanged;
@@ -51,7 +65,7 @@ namespace GOAP.Behaviours
             agentBehaviour.Events.OnTargetChanged -= EventsOnTargetChanged;
             agentBehaviour.Events.OnTargetOutOfRange -= EventsOnTargetOutOfRange;
         }
-
+        
         private void EventsOnTargetOutOfRange(ITarget target)
         {
             //animator.SetBool(walk, false);
@@ -84,16 +98,21 @@ namespace GOAP.Behaviours
                 navMeshAgent.SetDestination(currentTarget.Position);
             }
             
-            switch (StaticEvents.IsUserInRange)
+            if (isUserInRange && agentVelocity < 1.0f)
+                agentVelocity += Time.deltaTime * agentAcceleration;
+            else if (!isUserInRange)
             {
-                case true when agentVelocity < 1.0f:
-                    agentVelocity += Time.deltaTime * agentAcceleration;
-                    break;
-                case false when agentVelocity > 0.1f:
-                    agentVelocity -= Time.deltaTime * agentDeceleration;
-                    break;
+                switch (agentVelocity)
+                {
+                    case > 0.1f:
+                        agentVelocity -= Time.deltaTime * agentDeceleration;
+                        break;
+                    case < 0.1f:
+                        agentVelocity = 0.1f;
+                        break;
+                }
             }
-
+                
             //animator.SetBool(walk, navMeshAgent.velocity.magnitude > 0.1f);
             
             var worldDeltaPos = navMeshAgent.nextPosition - transform.position;

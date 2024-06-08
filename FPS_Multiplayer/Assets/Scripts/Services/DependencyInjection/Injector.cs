@@ -7,39 +7,44 @@ using UnityEngine;
 
 namespace Services.DependencyInjection
 {
-    [AttributeUsage(AttributeTargets.All)]
+    public interface IDependencyProvider{}
+    
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Method)]
     public sealed class InjectAttribute : Attribute
     {
-        public InjectAttribute()
+        public string Key { get; }
+
+        public InjectAttribute(string key = null)
         {
-            
+            Key = key;
         }
     }
     
-    [AttributeUsage(AttributeTargets.All)]
+    [AttributeUsage(AttributeTargets.Method)]
     public sealed class ProvideAttribute : Attribute
     {
-        public ProvideAttribute()
+        public string Key { get; }
+
+        public ProvideAttribute(string key = null)
         {
-            
+            Key = key;
         }
     }
-    
-    public interface IDependencyProvider{}
 
     public class Injector : Singleton<Injector>
     {
         private const BindingFlags _bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
-        private readonly Dictionary<Type, object> registry = new();
+        private readonly Dictionary<string, object> registry = new();
 
         protected override void Awake()
         {
             base.Awake();
-            
+
+            InitializeProvider();
             InitializeInjector();
         }
 
-        public void InitializeInjector()
+        private void InitializeProvider()
         {
             //Find all modules implementing IDependencyProvider
             var providers = FindMonoBehaviours()
@@ -49,12 +54,32 @@ namespace Services.DependencyInjection
             {
                 RegisterProvider(provider);
             }
-            
+        }
+        
+        private void InitializeInjector()
+        {
             //Find all injectable objects and inject their dependencies
             var injectables = FindMonoBehaviours().Where(IsInjectable);
             foreach (var injectable in injectables)
             {
                 Inject(injectable);
+            }
+        }
+        
+        public void InjectSingleField(MonoBehaviour instance, Type fieldType, string key = null)
+        {
+            var type = instance.GetType();
+            var injectableFields = type.GetFields(_bindingFlags)
+                .Where(member => IsInjectableField(member, fieldType, key));
+
+            foreach (var injectableField in injectableFields)
+            {
+                var resolvedInstance = Resolve(fieldType, key);
+                if (resolvedInstance == null)
+                    throw new Exception($"Failed to inject {fieldType.Name} into {type.Name}");
+                    
+                injectableField.SetValue(instance, resolvedInstance);
+                Debug.Log($"Injected single field {fieldType.Name} into {type.Name}");
             }
         }
         
@@ -66,19 +91,45 @@ namespace Services.DependencyInjection
 
             foreach (var injectableField in injectableFields)
             {
+                var injectAttribute = (InjectAttribute)Attribute.GetCustomAttribute(injectableField, typeof(InjectAttribute));
                 var fieldType = injectableField.FieldType;
-                var resolvedInstance = Resolve(fieldType);
+                var key = injectAttribute?.Key ?? fieldType.FullName;
+                var resolvedInstance = Resolve(fieldType, key);
+                
                 if (resolvedInstance == null)
                     throw new Exception($"Failed to inject {fieldType.Name} into {type.Name}");
                 
                 injectableField.SetValue(instance, resolvedInstance);
-                Debug.Log($"Injected {fieldType.Name} into {type.Name}");
+                Debug.Log($"Field Injected {fieldType.Name} into {type.Name}");
+            }
+            
+            var injectableMethods = type.GetMethods(_bindingFlags)
+                .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
+
+            foreach (var injectableMethod in injectableMethods)
+            {
+                var requiredParameters = injectableMethod.GetParameters()
+                    .Select(parameter => parameter.ParameterType)
+                    .ToArray();
+
+                var resolvedInstances = requiredParameters.Select(parameterType =>
+                {
+                    var injectAttribute = (InjectAttribute)Attribute.GetCustomAttribute(injectableMethod, typeof(InjectAttribute));
+                    var key = injectAttribute?.Key ?? parameterType.FullName;
+                    return Resolve(parameterType, key);
+                }).ToArray();
+                
+                if (resolvedInstances.Any(resolvedInstance => resolvedInstance == null))
+                    throw new Exception($"Failed to inject {type.Name}.{injectableMethod.Name}");
+
+                injectableMethod.Invoke(instance, resolvedInstances);
+                Debug.Log($"Method Injected {type.Name}.{injectableMethod.Name}");
             }
         }
-
-        private object Resolve(Type type)
+        
+        public object Resolve(Type type, string key)
         {
-            registry.TryGetValue(type, out var resolvedInstance);
+            registry.TryGetValue(key, out var resolvedInstance);
             return resolvedInstance;
         }
         
@@ -88,26 +139,32 @@ namespace Services.DependencyInjection
             return members.Any(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
         }
         
-        private void RegisterProvider(IDependencyProvider provider)
+        private bool IsInjectableField(FieldInfo field, Type fieldType, string key)
+        {
+            // Kiểm tra xem field có kiểu dữ liệu phù hợp và có khóa (key) trùng khớp không
+            return field.FieldType == fieldType && field.GetCustomAttribute<InjectAttribute>() != null && field.GetCustomAttribute<InjectAttribute>().Key == key;
+        }
+        
+        public void RegisterProvider(IDependencyProvider provider, string key = null)
         {
             var methods = provider.GetType().GetMethods(_bindingFlags);
 
             foreach (var method in methods)
             {
                 if (!Attribute.IsDefined(method, typeof(ProvideAttribute))) continue;
-
-                var returnType = method.ReturnType;
+                
+                key ??= method.ReturnType.FullName;
                 var providerInstance = method.Invoke(provider, null);
                 if (providerInstance != null)
                 {
-                    if (registry.TryAdd(returnType, providerInstance))
+                    if (registry.TryAdd(key, providerInstance))
                     {
-                        Debug.Log($"Registered {returnType.Name} from {provider.GetType().Name}");
+                        Debug.Log($"Registered {method.ReturnType.Name} with key {key} from {provider.GetType().Name}");
                     }
                 }
                 else
                 {
-                    throw new Exception($"Provider {provider.GetType().Name} returned null for {returnType.Name}");
+                    throw new Exception($"Provider {provider.GetType().Name} returned null for {method.ReturnType.Name}");
                 }
             }
         }
