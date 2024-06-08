@@ -1,4 +1,6 @@
-﻿namespace Interfaces
+﻿using GOAP.Sensors;
+
+namespace Interfaces
 {
     public interface IEnemy
     {

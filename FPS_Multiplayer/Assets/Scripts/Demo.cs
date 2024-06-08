@@ -10,7 +10,7 @@ public class Demo : MonoBehaviour
     private void Start()
     {
         //playerSensor.IsUserInRange.AddListener(OnUpdateSensor);
-        ZombieManager.Instance.InitZombiePlayerSensor();
+        //Move to Launcher
     }
 
     private void OnUpdateSensor(bool test)

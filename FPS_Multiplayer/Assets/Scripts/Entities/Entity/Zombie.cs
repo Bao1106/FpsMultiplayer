@@ -12,7 +12,7 @@ namespace Entities.Entity
     public class Zombie : Enemy
     {
         public string zombieName;
-        public IPlayerSensor iPlayerSensor;
+        public IPlayerSensor PlayerSensor;
         
         private static readonly int deadType = Animator.StringToHash("DeadType");
         private static readonly int dead = Animator.StringToHash("Dead");

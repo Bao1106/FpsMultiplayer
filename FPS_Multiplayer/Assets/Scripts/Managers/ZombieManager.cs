@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Entities.Entity;
 using GOAP.Sensors;
+using Interfaces;
 using Services.DependencyInjection;
 using Services.Utils;
-using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Managers
 {
@@ -12,22 +14,40 @@ namespace Managers
     {
         [SerializeField] private List<Zombie> lstZombie;
         
-        private Dictionary<string, IPlayerSensor> playerSensors = new ();
-
-        public void InitZombiePlayerSensor()
+        private readonly Dictionary<string, IPlayerSensor> playerSensors = new ();
+        private readonly TaskCompletionSource<bool> taskCompletion = new ();
+        private ISceneInit sceneInit;
+        
+        public void Initialize(ISceneInit manager)
         {
+            sceneInit = manager;
+            taskCompletion.SetResult(true);
+        }
+
+        public async void InitZombiePlayerSensor()
+        {
+            await taskCompletion.Task;
             foreach (var zombie in lstZombie)
             {
                 Injector.Instance.RegisterProvider(zombie.GetSensor(), zombie.zombieName);
                 Injector.Instance.InjectSingleField(this, typeof(IPlayerSensor), zombie.zombieName);
                 
-                zombie.iPlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), zombie.zombieName);
-                zombie.iPlayerSensor.IsUserInRange.AddListener(OnDemoUpdate);
+                //zombie.PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), zombie.EnemyName);
+                //zombie.PlayerSensor.IsUserInRange.AddListener(OnDemoUpdate);
                 
                 StorePlayerSensor(zombie.zombieName, zombie.GetSensor());
             }
+            
+            sceneInit.InitComplete();
         }
 
+        public void OnInjectPlayerSensor(string enemyName, UnityAction<string, bool> callback)
+        {
+            var id = lstZombie.FindIndex(_ => _.zombieName.Equals(enemyName));
+            lstZombie[id].PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), enemyName);
+            lstZombie[id].PlayerSensor.IsUserInRange.AddListener(callback);
+        }
+        
         private void OnDemoUpdate(string testName, bool test)
         {
             Debug.LogError($"Check name: {testName}");

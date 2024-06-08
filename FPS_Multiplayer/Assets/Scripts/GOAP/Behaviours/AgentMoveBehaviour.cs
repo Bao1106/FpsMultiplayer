@@ -1,9 +1,11 @@
 ﻿using System;
 using CrashKonijn.Goap.Behaviours;
 using CrashKonijn.Goap.Interfaces;
+using Entities.Entity;
 using Events;
 using GOAP.Sensors;
 using Interfaces;
+using Managers;
 using Services.DependencyInjection;
 using UnityEngine;
 using UnityEngine.AI;
@@ -18,13 +20,17 @@ namespace GOAP.Behaviours
         //[Inject] private IPlayerSensor playerSensor;
         
         private ITarget currentTarget;
+        private ISceneInit sceneInit;
+        
         private NavMeshAgent navMeshAgent;
         private Animator animator;
         private AgentBehaviour agentBehaviour;
+        
         private Vector3 lastPos;
         private Vector2 smoothDeltaPos, smoothVelocity;
         
         private float agentVelocity = 0.1f;
+        private float defaultSpeed;
         private bool isUserInRange;
         
         private readonly float agentAcceleration = 0.1f;
@@ -32,24 +38,33 @@ namespace GOAP.Behaviours
         
         private static readonly int velocity = Animator.StringToHash("Velocity");
 
+        public void Initialize(ISceneInit manager)
+        {
+            sceneInit = manager;
+        }
+        
         private void Awake()
         {
             navMeshAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
             agentBehaviour = GetComponent<AgentBehaviour>();
 
+            sceneInit = SceneInjectorManager.Instance.SceneInitManager;
+            
             animator.applyRootMotion = true;
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = true;
+            defaultSpeed = navMeshAgent.speed;
         }
 
-        private void Start()
+        private async void Start()
         {
-            //playerSensor.IsUserInRange.AddListener(OnUpdateSensor);
-            OnUpdateSensor(false);
+            await sceneInit.SceneInitTask;
+            var zombie = GetComponent<Zombie>();
+            ZombieManager.Instance.OnInjectPlayerSensor(zombie.zombieName, OnUpdateSensor);
         }
 
-        private void OnUpdateSensor(bool userInRange)
+        private void OnUpdateSensor(string enemyName, bool userInRange)
         {
             isUserInRange = userInRange;
         }
@@ -91,11 +106,14 @@ namespace GOAP.Behaviours
         private void Update()
         {
             if (currentTarget == null) return;
+
+            navMeshAgent.speed = defaultSpeed;
             
             if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && Entity.EntityHealth.Value > 0)
             {
                 lastPos = currentTarget.Position;
                 navMeshAgent.SetDestination(currentTarget.Position);
+                navMeshAgent.speed = defaultSpeed * 2;
             }
             
             if (isUserInRange && agentVelocity < 1.0f)
