@@ -1,18 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Enums;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace SO
 {
-    public enum BulletType
-    {
-        CasingBig = 0,
-        CasingSmall = 1,
-        CasingGrenade = 2,
-        CasingShell = 3
-    }
-
     [Serializable]
     public class BulletClass
     {

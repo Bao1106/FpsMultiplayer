@@ -1,20 +1,28 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities.Entity;
+using Enums;
 using GOAP.Sensors;
 using Interfaces;
 using Services.DependencyInjection;
 using Services.Utils;
+using SO;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Pool;
 
 namespace Managers
 {
     public class ZombieManager : Singleton<ZombieManager>
     {
         [SerializeField] private List<Zombie> lstZombie;
+        [SerializeField] private FlyweightZombieSettings setting;
         
-        private readonly Dictionary<string, IPlayerSensor> playerSensors = new ();
+        [SerializeField] private bool collectionCheck = true;
+        [SerializeField] private int maxCapacity = 100;
+        [SerializeField] private int defaultCapacity;
+
+        private readonly Dictionary<GameMode, IObjectPool<Zombie>> pools = new();
         private readonly TaskCompletionSource<bool> taskCompletion = new ();
         private ISceneInit sceneInit;
         
@@ -24,17 +32,17 @@ namespace Managers
             taskCompletion.SetResult(true);
         }
 
+        public void StoreZombies(Zombie zombie)
+        {
+            lstZombie.Add(zombie);
+        }
+        
         public async void InitZombiePlayerSensor()
         {
             await taskCompletion.Task;
             foreach (var zombie in lstZombie)
             {
                 Injector.Instance.RegisterProvider(zombie.GetSensor(), zombie.zombieName);
-                //Injector.Instance.InjectSingleField(this, typeof(IPlayerSensor), zombie.zombieName);
-                //zombie.PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), zombie.EnemyName);
-                //zombie.PlayerSensor.IsUserInRange.AddListener(OnDemoUpdate);
-                
-                StorePlayerSensor(zombie.zombieName, zombie.GetSensor());
             }
             
             sceneInit.InitComplete();
@@ -46,16 +54,31 @@ namespace Managers
             lstZombie[id].PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), enemyName);
             lstZombie[id].PlayerSensor.IsUserInRange.AddListener(callback);
         }
+
+        public static Zombie Spawn(FlyweightZombieSettings s)
+            => Instance.GetPoolFor(s).Get();
+
+        public static void ReturnToPool(Zombie z)
+            => Instance.GetPoolFor(Instance.setting)?.Release(z);
         
-        private void OnDemoUpdate(string testName, bool test)
+        private IObjectPool<Zombie> GetPoolFor(FlyweightZombieSettings settings)
         {
-            Debug.LogError($"Check name: {testName}");
-            Debug.LogError($"Check bool: {test}");
-        }
-        
-        private void StorePlayerSensor(string key, IPlayerSensor playerSensor)
-        {
-            playerSensors.TryAdd(key, playerSensor);
+            var gameMode = GameMode.Single;
+
+            if (pools.TryGetValue(gameMode, out var pool)) 
+                return pool;
+
+            pool = new ObjectPool<Zombie>(
+                settings.Create,
+                settings.OnGet,
+                settings.OnRelease,
+                settings.OnDestroyObject,
+                collectionCheck,
+                defaultCapacity,
+                maxCapacity);
+            pools.Add(gameMode, pool);
+            
+            return pool;
         }
     }
 }

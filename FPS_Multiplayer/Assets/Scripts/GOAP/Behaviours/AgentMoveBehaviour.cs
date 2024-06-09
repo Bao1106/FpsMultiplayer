@@ -53,6 +53,7 @@ namespace GOAP.Behaviours
             await sceneInit.SceneInitTask;
             var zombie = GetComponent<Zombie>();
             ZombieManager.Instance.OnInjectPlayerSensor(zombie.zombieName, OnUpdateSensor);
+            Injector.Instance.InjectSingleField(this, typeof(IEntity));
         }
 
         private void OnUpdateSensor(string enemyName, bool userInRange)

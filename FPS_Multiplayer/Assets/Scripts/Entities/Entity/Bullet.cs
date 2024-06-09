@@ -1,4 +1,4 @@
-using SO;
+using Enums;
 using UnityEngine;
 
 namespace Entities.Entity

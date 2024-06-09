@@ -6,10 +6,12 @@ namespace GOAP.Behaviours
     [RequireComponent(typeof(AgentBehaviour))]
     public class GoapSetBinder : MonoBehaviour
     {
-        [SerializeField] private GoapRunnerBehaviour goapRunner;
+        private GoapRunnerBehaviour goapRunner;
 
         private void Awake()
         {
+            goapRunner = FindObjectOfType<GoapRunnerBehaviour>();
+            
             var agent = GetComponent<AgentBehaviour>();
             agent.GoapSet = goapRunner.GetGoapSet("ZombieSet");
         }
