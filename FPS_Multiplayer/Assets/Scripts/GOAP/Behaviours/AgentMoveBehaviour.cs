@@ -1,9 +1,6 @@
-﻿using System;
-using CrashKonijn.Goap.Behaviours;
+﻿using CrashKonijn.Goap.Behaviours;
 using CrashKonijn.Goap.Interfaces;
 using Entities.Entity;
-using Events;
-using GOAP.Sensors;
 using Interfaces;
 using Managers;
 using Services.DependencyInjection;
@@ -17,7 +14,6 @@ namespace GOAP.Behaviours
     {
         [SerializeField] private float minMoveDistance = 0.25f;
         [Inject] public IEntity Entity;
-        //[Inject] private IPlayerSensor playerSensor;
         
         private ITarget currentTarget;
         private ISceneInit sceneInit;
@@ -37,11 +33,6 @@ namespace GOAP.Behaviours
         private readonly float agentDeceleration = 0.4f;
         
         private static readonly int velocity = Animator.StringToHash("Velocity");
-
-        public void Initialize(ISceneInit manager)
-        {
-            sceneInit = manager;
-        }
         
         private void Awake()
         {
@@ -106,8 +97,6 @@ namespace GOAP.Behaviours
         private void Update()
         {
             if (currentTarget == null) return;
-
-            navMeshAgent.speed = defaultSpeed;
             
             if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && Entity.EntityHealth.Value > 0)
             {
@@ -120,6 +109,7 @@ namespace GOAP.Behaviours
                 agentVelocity += Time.deltaTime * agentAcceleration;
             else if (!isUserInRange)
             {
+                navMeshAgent.speed = defaultSpeed;
                 switch (agentVelocity)
                 {
                     case > 0.1f:

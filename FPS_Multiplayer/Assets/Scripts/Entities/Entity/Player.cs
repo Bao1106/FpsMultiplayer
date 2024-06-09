@@ -1,4 +1,3 @@
-using Events;
 using GOAP.Config;
 using Services;
 using UnityEngine;

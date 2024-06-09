@@ -3794,6 +3794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
   playerSensor: {fileID: 909629317}
+  zombieName: 
 --- !u!64 &256531554
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -11752,6 +11753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
   playerSensor: {fileID: 1573820189}
+  zombieName: 
 --- !u!64 &684403847
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12338,8 +12340,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 719566709}
-  - component: {fileID: 719566711}
   - component: {fileID: 719566712}
+  - component: {fileID: 719566711}
   - component: {fileID: 719566714}
   - component: {fileID: 719566713}
   - component: {fileID: 719566715}
@@ -21144,6 +21146,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
   playerSensor: {fileID: 347629302}
+  zombieName: 
 --- !u!64 &1141833638
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -23030,6 +23033,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
   playerSensor: {fileID: 880243795}
+  zombieName: 
 --- !u!64 &1228917581
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -47961,6 +47965,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
   playerSensor: {fileID: 1544453228}
+  zombieName: 
 --- !u!4 &97694939153416314
 Transform:
   m_ObjectHideFlags: 0

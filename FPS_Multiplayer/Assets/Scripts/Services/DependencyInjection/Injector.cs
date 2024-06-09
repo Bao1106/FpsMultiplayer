@@ -66,21 +66,27 @@ namespace Services.DependencyInjection
             }
         }
         
-        public void InjectSingleField(MonoBehaviour instance, Type fieldType, string key = null)
+        public void InjectSingleField(MonoBehaviour instance, Type fieldType)
         {
-            var type = instance.GetType();
-            var injectableFields = type.GetFields(_bindingFlags)
-                .Where(member => IsInjectableField(member, fieldType, key));
-
-            foreach (var injectableField in injectableFields)
+            if (IsInjectable(instance))
             {
-                var resolvedInstance = Resolve(fieldType, key);
-                if (resolvedInstance == null)
-                    throw new Exception($"Failed to inject {fieldType.Name} into {type.Name}");
+                var type = instance.GetType();
+                var injectableFields = type.GetFields(_bindingFlags)
+                    .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
+                
+                foreach (var injectableField in injectableFields)
+                {
+                    var key = injectableField.FieldType.FullName;
+                    var resolvedInstance = Resolve(fieldType, key);
+                    if (resolvedInstance == null)
+                        throw new Exception($"Failed to inject {fieldType.Name} into {type.Name}");
                     
-                injectableField.SetValue(instance, resolvedInstance);
-                Debug.Log($"Injected single field {fieldType.Name} into {type.Name}");
+                    injectableField.SetValue(instance, resolvedInstance);
+                    Debug.Log($"Injected single field {fieldType.Name} into {type.Name}");
+                }
             }
+            
+            //key ??= fieldType.FullName;
         }
         
         private void Inject(object instance)

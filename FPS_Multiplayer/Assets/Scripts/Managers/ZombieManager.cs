@@ -30,8 +30,7 @@ namespace Managers
             foreach (var zombie in lstZombie)
             {
                 Injector.Instance.RegisterProvider(zombie.GetSensor(), zombie.zombieName);
-                Injector.Instance.InjectSingleField(this, typeof(IPlayerSensor), zombie.zombieName);
-                
+                //Injector.Instance.InjectSingleField(this, typeof(IPlayerSensor), zombie.zombieName);
                 //zombie.PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), zombie.EnemyName);
                 //zombie.PlayerSensor.IsUserInRange.AddListener(OnDemoUpdate);
                 
