@@ -1,8 +1,11 @@
 using System;
 using GOAP.Sensors;
 using Interfaces;
+using Services;
+using Services.DependencyInjection;
 using SO;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace Entities.Base
 {
@@ -21,12 +24,12 @@ namespace Entities.Base
             Animator = GetComponent<Animator>();
         }
         
-        public int EnemyHealth { get; set; }
+        public Observer<int> EnemyHealth { get; set; }
 
         public void OnDamaged(int damage)
         {
-            EnemyHealth -= damage;
-            if (EnemyHealth == 0)
+            EnemyHealth.Value -= damage;
+            if (EnemyHealth.Value == 0)
             {
                 OnEnemyDead?.Invoke();
             }

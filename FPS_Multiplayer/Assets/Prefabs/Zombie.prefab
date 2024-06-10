@@ -488,8 +488,9 @@ GameObject:
   - component: {fileID: 1202496380199202549}
   - component: {fileID: 8046389134502768051}
   - component: {fileID: 6320949301467044130}
-  - component: {fileID: 7350180262233164615}
+  - component: {fileID: 3715234159889179432}
   - component: {fileID: 9149877087749691663}
+  - component: {fileID: 7350180262233164615}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: Blood
@@ -551,7 +552,7 @@ NavMeshAgent:
   m_Acceleration: 3
   avoidancePriority: 50
   m_AngularSpeed: 360
-  m_StoppingDistance: 1.02
+  m_StoppingDistance: 1.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -586,6 +587,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minMoveDistance: 0.25
+  observerAgent: {fileID: 3715234159889179432}
 --- !u!114 &8046389134502768051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -612,7 +614,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2b2ad9e5e4d455e8c9c5d5471ee1bd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goapRunner: {fileID: 0}
+--- !u!114 &3715234159889179432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596179680842037619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 931808c5e459e2540ad8a6913b87a478, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9149877087749691663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596179680842037619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 860cddc9daa8433488c617dc73fdb190, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
+  playerSensor: {fileID: 3746198424263321028}
+  zombieName: 
 --- !u!64 &7350180262233164615
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -635,21 +663,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300008, guid: 9776c2c565280054689a67587800f1d9, type: 3}
---- !u!114 &9149877087749691663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 596179680842037619}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 860cddc9daa8433488c617dc73fdb190, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
-  playerSensor: {fileID: 3746198424263321028}
-  zombieName: 
 --- !u!1 &609518857292759160
 GameObject:
   m_ObjectHideFlags: 0

@@ -26,7 +26,7 @@ namespace GOAP.Actions
             data.Timer -= context.DeltaTime;
             var shouldAttack = data.Target != null &&
                                Vector3.Distance(data.Target.Position, agent.transform.position) <= attackConfig.normalAttackRadius &&
-                               data.MoveBehaviour.Entity.EntityHealth.Value > 0;
+                               data.MoveBehaviour.ObserverAgent.EntityHealth() > 0;
 
             data.Animator.SetBool(AttackData.Attack, shouldAttack);
             if (shouldAttack)

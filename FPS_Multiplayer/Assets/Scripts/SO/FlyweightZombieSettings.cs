@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using Entities.Entity;
 using Enums;
+using Services;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace SO
 {
@@ -13,16 +15,19 @@ namespace SO
         public GameMode gameMode;
         public float initRate;
         public float respawnRate;
+        public float killRate;
     }
     
     [CreateAssetMenu(menuName = "Game Configs/Zombie Config", fileName = "Zombie Config", order = 2)]
     public class FlyweightZombieSettings : SerializedScriptableObject
     {
         [TableList] [SerializeField] private List<ZombieSpawnRate> zombieSpawnRates;
-        public GameObject prefab;
+        public GameObject prefab, plane;
         public float despawnDelay = 5f;
         public int zombieHealth = 100;
 
+        private Vector3 planeSize;
+        
         public float GetZombieInitRate(GameMode gameMode)
         {
             return zombieSpawnRates.Find(_ => _.gameMode == gameMode).initRate;
@@ -32,11 +37,23 @@ namespace SO
         {
             return zombieSpawnRates.Find(_ => _.gameMode == gameMode).respawnRate;
         }
+        
+        public float GetZombieKillRate(GameMode gameMode)
+        {
+            return zombieSpawnRates.Find(_ => _.gameMode == gameMode).killRate;
+        }
 
+        public void GetPlaneSize() => planeSize = plane.GetComponent<Renderer>().bounds.size;
+        
         public Zombie Create()
         {
-            var zombie = Instantiate(prefab).GetComponent<Zombie>();
-            zombie.EnemyHealth = zombieHealth;
+            var randomX = Random.Range(-planeSize.x / 2, planeSize.x / 2);
+            var randomZ = Random.Range(-planeSize.z / 2, planeSize.z / 2);
+            var randomPos = new Vector3(randomX, prefab.transform.position.y, randomZ);
+            
+            var zombie = Instantiate(prefab, randomPos, Quaternion.identity).GetComponent<Zombie>();
+            zombie.EnemyHealth = new Observer<int>(zombieHealth);
+            zombie.EnemyHealth.Invoke();
 
             return zombie;
         }

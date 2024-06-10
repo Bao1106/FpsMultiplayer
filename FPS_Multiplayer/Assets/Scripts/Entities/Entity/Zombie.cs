@@ -1,6 +1,7 @@
 ﻿using System;
 using Entities.Base;
 using GOAP.Sensors;
+using Managers;
 using SO;
 using Unity.VisualScripting;
 using UnityEditor.UIElements;
@@ -60,7 +61,9 @@ namespace Entities.Entity
         
         public void DestroyObject()
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            ZombieManager.ReturnToPool(this);
+            ZombieManager.Instance.CheckPool();
         }
         
 

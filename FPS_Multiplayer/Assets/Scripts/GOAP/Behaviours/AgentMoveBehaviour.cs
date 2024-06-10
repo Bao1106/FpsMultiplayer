@@ -3,6 +3,7 @@ using CrashKonijn.Goap.Interfaces;
 using Entities.Entity;
 using Interfaces;
 using Managers;
+using Services;
 using Services.DependencyInjection;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,52 +14,35 @@ namespace GOAP.Behaviours
     public class AgentMoveBehaviour : MonoBehaviour
     {
         [SerializeField] private float minMoveDistance = 0.25f;
-        [Inject] public IEntity Entity;
+        [SerializeField] private ObserverAgentStats observerAgent;
         
         private ITarget currentTarget;
-        private ISceneInit sceneInit;
         
         private NavMeshAgent navMeshAgent;
         private Animator animator;
         private AgentBehaviour agentBehaviour;
         
         private Vector3 lastPos;
-        private Vector2 smoothDeltaPos, smoothVelocity;
+        private Vector2 smoothDeltaPos;
         
-        private float agentVelocity = 0.1f;
         private float defaultSpeed;
+        private int agentHealth;
         private bool isUserInRange;
         
-        private readonly float agentAcceleration = 0.1f;
-        private readonly float agentDeceleration = 0.4f;
-        
         private static readonly int velocity = Animator.StringToHash("Velocity");
+
+        public ObserverAgentStats ObserverAgent => observerAgent;
         
         private void Awake()
         {
             navMeshAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
             agentBehaviour = GetComponent<AgentBehaviour>();
-
-            sceneInit = SceneInjectorManager.Instance.SceneInitManager;
             
             animator.applyRootMotion = true;
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = true;
             defaultSpeed = navMeshAgent.speed;
-        }
-
-        private async void Start()
-        {
-            await sceneInit.SceneInitTask;
-            var zombie = GetComponent<Zombie>();
-            ZombieManager.Instance.OnInjectPlayerSensor(zombie.zombieName, OnUpdateSensor);
-            Injector.Instance.InjectSingleField(this, typeof(IEntity));
-        }
-
-        private void OnUpdateSensor(string enemyName, bool userInRange)
-        {
-            isUserInRange = userInRange;
         }
         
         private void OnEnable()
@@ -98,31 +82,22 @@ namespace GOAP.Behaviours
         private void Update()
         {
             if (currentTarget == null) return;
+
+            if (observerAgent.AgentHealth <= 0)
+            {
+                navMeshAgent.speed = 0;
+                return;
+            }
             
-            if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && Entity.EntityHealth.Value > 0)
+            if (minMoveDistance <= Vector3.Distance(currentTarget.Position, lastPos) && observerAgent.EntityHealth() > 0)
             {
                 lastPos = currentTarget.Position;
                 navMeshAgent.SetDestination(currentTarget.Position);
-                navMeshAgent.speed = defaultSpeed * 2;
             }
-            
-            if (isUserInRange && agentVelocity < 1.0f)
-                agentVelocity += Time.deltaTime * agentAcceleration;
-            else if (!isUserInRange)
-            {
-                navMeshAgent.speed = defaultSpeed;
-                switch (agentVelocity)
-                {
-                    case > 0.1f:
-                        agentVelocity -= Time.deltaTime * agentDeceleration;
-                        break;
-                    case < 0.1f:
-                        agentVelocity = 0.1f;
-                        break;
-                }
-            }
-                
-            //animator.SetBool(walk, navMeshAgent.velocity.magnitude > 0.1f);
+
+            var agentVelocity = observerAgent.CalculateVelocity(animator, navMeshAgent, defaultSpeed);
+            animator.SetFloat(velocity, navMeshAgent.velocity.magnitude > 0.1f 
+                ? agentVelocity : 0.05f);
             
             var worldDeltaPos = navMeshAgent.nextPosition - transform.position;
             worldDeltaPos.y = 0;
@@ -133,13 +108,8 @@ namespace GOAP.Behaviours
 
             var smooth = Mathf.Min(1, Time.deltaTime / 0.1f);
             smoothDeltaPos = Vector2.Lerp(smoothDeltaPos, deltaPos, smooth);
-            smoothVelocity = smoothDeltaPos / Time.deltaTime;
-
+            
             var deltaMagnitude = worldDeltaPos.magnitude;
-            
-            animator.SetFloat(velocity, navMeshAgent.velocity.magnitude > 0.1f 
-                ? agentVelocity : 0.05f);
-            
             if (deltaMagnitude > navMeshAgent.radius / 2f)
             {
                 transform.position = Vector3

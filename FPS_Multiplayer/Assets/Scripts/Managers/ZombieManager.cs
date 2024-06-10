@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Entities.Entity;
 using Enums;
@@ -24,7 +25,10 @@ namespace Managers
 
         private readonly Dictionary<GameMode, IObjectPool<Zombie>> pools = new();
         private readonly TaskCompletionSource<bool> taskCompletion = new ();
+        private readonly GameMode gameMode = GameMode.Single;
         private ISceneInit sceneInit;
+
+        public static UnityAction<float> OnGetRespawnRate;
         
         public void Initialize(ISceneInit manager)
         {
@@ -55,6 +59,18 @@ namespace Managers
             lstZombie[id].PlayerSensor.IsUserInRange.AddListener(callback);
         }
 
+        public void CheckPool()
+        {
+            var zombieReleaseCount = lstZombie
+                .FindAll(z => !z.gameObject.activeSelf)
+                .Count;
+
+            if (zombieReleaseCount >= setting.GetZombieKillRate(gameMode))
+            {
+                OnGetRespawnRate.Invoke(setting.GetZombieRespawnRate(gameMode));
+            }
+        }
+
         public static Zombie Spawn(FlyweightZombieSettings s)
             => Instance.GetPoolFor(s).Get();
 
@@ -63,8 +79,6 @@ namespace Managers
         
         private IObjectPool<Zombie> GetPoolFor(FlyweightZombieSettings settings)
         {
-            var gameMode = GameMode.Single;
-
             if (pools.TryGetValue(gameMode, out var pool)) 
                 return pool;
 

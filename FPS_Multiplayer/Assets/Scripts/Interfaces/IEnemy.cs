@@ -1,10 +1,11 @@
 ﻿using GOAP.Sensors;
+using Services;
 
 namespace Interfaces
 {
     public interface IEnemy
     {
-        int EnemyHealth { get; set; }
+        Observer<int> EnemyHealth { get; set; }
         void OnDamaged(int damage);
     }
 }
