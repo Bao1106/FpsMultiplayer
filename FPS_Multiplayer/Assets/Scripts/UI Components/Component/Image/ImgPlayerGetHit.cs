@@ -14,7 +14,7 @@ namespace UI_Components.Component.Image
         protected override void Start()
         {
             base.Start();
-            Image.enabled = false;
+            ValueImage.enabled = false;
             
             Injector.Instance.InjectSingleField(this, typeof(IEntity));
             entity.IsDamaged.AddListener(OnActivePanel);
@@ -22,7 +22,7 @@ namespace UI_Components.Component.Image
 
         private IEnumerator ActivePanel(bool isDamaged)
         {
-            Image.enabled = isDamaged;
+            ValueImage.enabled = isDamaged;
             yield return new WaitForSeconds(0.2f);
             entity.IsDamaged.Value = false;
         }

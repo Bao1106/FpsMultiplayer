@@ -44,7 +44,6 @@ namespace GOAP.Sensors
             if (other.TryGetComponent(out Player player))
             {
                 OnPlayerEnter?.Invoke(player.transform);
-                //Debug.LogError($"Check Name Enter: {key}");
                 IsUserInRange.Value1 = key;
                 IsUserInRange.Value2 = true;
             }
@@ -55,7 +54,6 @@ namespace GOAP.Sensors
             if (other.TryGetComponent(out Player player))
             {
                 OnPlayerExit?.Invoke(other.transform.position);
-                //Debug.LogError($"Check Name Exit: {key}");
                 IsUserInRange.Value1 = key;
                 IsUserInRange.Value2 = false;
             }

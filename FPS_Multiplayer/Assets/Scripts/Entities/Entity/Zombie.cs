@@ -59,7 +59,7 @@ namespace Entities.Entity
             }
         }
         
-        public void DestroyObject()
+        public void ReturnToPool()
         {
             //Destroy(gameObject);
             ZombieManager.ReturnToPool(this);

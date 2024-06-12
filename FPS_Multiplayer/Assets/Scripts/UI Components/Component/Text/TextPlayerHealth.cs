@@ -19,7 +19,7 @@ namespace UI_Components.Component.Text
 
         private void UpdateValue(int health)
         {
-            TxtValue.text = $"HEALTH: {health}";
+            ValueText.text = $"HEALTH: {health}";
         }
     }
 }

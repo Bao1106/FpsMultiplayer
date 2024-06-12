@@ -1,17 +1,18 @@
 ﻿using System;
 using TMPro;
 using UnityEngine;
-using ITextElement = Interfaces.ITextElement;
+using ITextElement = Interfaces.UI.ITextElement;
+using UI_ITextElement = Interfaces.UI.ITextElement;
 
 namespace UI_Components.Base
 {
-    public class BaseText : MonoBehaviour, ITextElement
+    public class BaseText : MonoBehaviour, UI_ITextElement
     {
-        public TMP_Text TxtValue { get; set; }
+        public TMP_Text ValueText { get; set; }
 
         protected virtual void Start()
         {
-            TxtValue = GetComponent<TMP_Text>();
+            ValueText = GetComponent<TMP_Text>();
         }
     }
 }
