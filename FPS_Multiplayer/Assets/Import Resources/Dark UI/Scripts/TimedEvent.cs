@@ -18,7 +18,7 @@ namespace Michsky.UI.Dark
         {
             if(enableAtStart == true)
             {
-                StartCoroutine("TimedEventStart");
+                StartCoroutine(nameof(TimedEventStart));
             }
         }
 
@@ -30,12 +30,12 @@ namespace Michsky.UI.Dark
 
         public void StartIEnumerator ()
         {
-            StartCoroutine("TimedEventStart");
+            StartCoroutine(nameof(TimedEventStart));
         }
 
         public void StopIEnumerator ()
         {
-            StopCoroutine("TimedEventStart");
+            StopCoroutine(nameof(TimedEventStart));
         }
     }
 }

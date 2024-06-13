@@ -25,11 +25,13 @@ namespace Michsky.UI.Dark
                 mainPanels.SetActive(true);
 
                 mainPanelsAnimator = mainPanels.GetComponent<Animator>();
+                Debug.LogError(mainPanelsAnimator != null);
                 mainPanelsAnimator.Play("Splash Disabled");
+                Debug.LogError(999);
+                
                 homePanelAnimator = homePanel.GetComponent<Animator>();
                 homePanelAnimator.Play("Panel In");
             }
-
             else
             {
                 splashScreen.SetActive(true);

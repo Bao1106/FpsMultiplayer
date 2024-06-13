@@ -42,7 +42,7 @@ namespace Michsky.UI.Dark
                 blurMaterial.SetFloat(customProperty, currentBlurValue);
                 yield return null;
             }
-            StopCoroutine("BlurIn");
+            StopCoroutine(nameof(BlurIn));
         }
 
         IEnumerator BlurOut()
@@ -61,19 +61,19 @@ namespace Michsky.UI.Dark
                 blurMaterial.SetFloat(customProperty, currentBlurValue);
                 yield return null;
             }
-            StopCoroutine("BlurOut");
+            StopCoroutine(nameof(BlurOut));
         }
 
         public void BlurInAnim()
         {
-            StopCoroutine("BlurOut");
-            StartCoroutine("BlurIn");
+            StopCoroutine(nameof(BlurOut));
+            StartCoroutine(nameof(BlurIn));
         }
 
         public void BlurOutAnim()
         {
-            StopCoroutine("BlurIn");
-            StartCoroutine("BlurOut");
+            StopCoroutine(nameof(BlurIn));
+            StartCoroutine(nameof(BlurOut));
         }
 
         public void SetBlurValue(float cbv)
