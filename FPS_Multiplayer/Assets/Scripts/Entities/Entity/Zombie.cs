@@ -1,12 +1,7 @@
-﻿using System;
-using Entities.Base;
+﻿using Entities.Base;
 using GOAP.Sensors;
 using Managers;
-using SO;
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Entities.Entity

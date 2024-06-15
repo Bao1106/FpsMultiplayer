@@ -1,4 +1,6 @@
-﻿namespace Enums
+﻿using Unity.VisualScripting;
+
+namespace Enums
 {
     public enum GameMode 
     {
@@ -12,5 +14,15 @@
         CasingSmall = 1,
         CasingGrenade = 2,
         CasingShell = 3
+    }
+
+    public enum ModalWindowType
+    {
+        Exit = 0,
+        LoadChapter = 1,
+        LoadSave = 2,
+        BindKey = 3,
+        ConnectServer = 4,
+        MultiplayerFilter = 5
     }
 }

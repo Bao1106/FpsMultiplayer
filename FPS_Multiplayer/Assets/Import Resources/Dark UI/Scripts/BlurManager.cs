@@ -1,11 +1,24 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Enums;
+using Services.Utils;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Michsky.UI.Dark
 {
-    public class BlurManager : MonoBehaviour
+    [Serializable]
+    public class ModalWindows
     {
+        public ModalWindowType type;
+        public ModalWindowManager modalManager;
+    }
+    
+    public class BlurManager : Singleton<BlurManager>
+    {
+        [SerializeField] private List<ModalWindows> modalWindows = new();
+        
         [Header("RESOURCES")]
         public Material blurMaterial;
 
@@ -79,6 +92,11 @@ namespace Michsky.UI.Dark
         public void SetBlurValue(float cbv)
         {
             blurValue = cbv;
+        }
+
+        public void GetModalManagerAnim(ModalWindowType type)
+        {
+            modalWindows.Find(window => window.type == type)?.modalManager.ModalWindowIn();
         }
     }
 }

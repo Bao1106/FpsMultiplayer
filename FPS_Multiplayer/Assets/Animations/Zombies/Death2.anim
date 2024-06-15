@@ -118540,7 +118540,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 5
-    functionName: DestroyObject
+    functionName: ReturnToPool
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
