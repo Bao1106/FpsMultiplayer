@@ -38,7 +38,7 @@ namespace Managers.Multiplayer
             {
                 MaxPlayers = 4,
             };
-            PhotonNetwork.CreateRoom("test", testRoomOption);
+            PhotonNetwork.JoinOrCreateRoom("test", testRoomOption, null);
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
