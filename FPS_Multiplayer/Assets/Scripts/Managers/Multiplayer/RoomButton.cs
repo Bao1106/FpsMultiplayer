@@ -43,7 +43,7 @@ namespace Managers.Multiplayer
             txtRoomName.text = roomName;
             txtMapName.text = mapName;
             txtModeGame.text = mode;
-            txtRoomSlot.text = $"Slot: {currentSlot}/{roomSlot}";
+            txtRoomSlot.text = $"{currentSlot}/{roomSlot}";
         }
         
         public void GetRoomInfo(RoomInfo info)

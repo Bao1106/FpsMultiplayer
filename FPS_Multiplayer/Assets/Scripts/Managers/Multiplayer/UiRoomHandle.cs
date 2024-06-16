@@ -32,8 +32,13 @@ namespace Managers.Multiplayer
         private void OnClickInitRoom(ModalWindowType type)
         {
             BlurManager.Instance.BlurInAnim();
+            foreach (var window in modalWindows)
+            {
+                window.modalManager.gameObject.SetActive(false);
+            }
             
             var modal = GetModalManager(type);
+            modal.gameObject.SetActive(true);
             modal.ModalWindowIn();
         }
         

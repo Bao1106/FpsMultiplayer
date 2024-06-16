@@ -14,6 +14,8 @@ namespace Managers.Multiplayer
         
         IEnumerator Start()
         {
+            PhotonNetwork.AutomaticallySyncScene = true;
+            
             if (PhotonNetwork.InRoom)
             {
                 PhotonNetwork.LeaveRoom();
@@ -31,7 +33,7 @@ namespace Managers.Multiplayer
         public override void OnConnectedToMaster()
         {
             base.OnConnectedToMaster();
-
+            
             PhotonNetwork.JoinLobby();
         }
         

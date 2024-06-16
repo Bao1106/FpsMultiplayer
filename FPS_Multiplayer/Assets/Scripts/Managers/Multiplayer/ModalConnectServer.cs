@@ -10,9 +10,9 @@ namespace Managers.Multiplayer
 
         public void SetupModal(string roomName, string mapName, int currentSlot, int maxSlot)
         {
-            txtRoomName.text = roomName;
+            txtRoomName.text = $"Room name: {roomName}";
             txtMapName.text = mapName;
-            txtSlot.text = $"{currentSlot}/{maxSlot}";
+            txtSlot.text = $"Slot: {currentSlot}/{maxSlot}";
         }
     }
 }

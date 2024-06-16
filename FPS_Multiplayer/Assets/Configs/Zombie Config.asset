@@ -31,6 +31,6 @@ MonoBehaviour:
     respawnRate: 15
     killRate: 25
   prefab: {fileID: 596179680842037619, guid: c09cbc3825a1dcc448e4ba3d4d327385, type: 3}
-  plane: {fileID: 0}
+  plane: {fileID: 3372323456361249315, guid: e0e9e7d71a3ea9942824da3a3b9d1a1c, type: 3}
   despawnDelay: 5
   zombieHealth: 100
