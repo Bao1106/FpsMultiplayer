@@ -1,3 +1,4 @@
+using Events;
 using Interfaces;
 using Services.DependencyInjection;
 using UI_Components.Base;
@@ -8,8 +9,10 @@ namespace UI_Components.Component.Text
     {
         [Inject] private IEntity entity;
         
-        protected override void Start()
+        protected override async void Start()
         {
+            await StaticEvents.SpawnPlayerCompleted.Task;
+            
             base.Start();
             Injector.Instance.InjectSingleField(this, typeof(IEntity));
             

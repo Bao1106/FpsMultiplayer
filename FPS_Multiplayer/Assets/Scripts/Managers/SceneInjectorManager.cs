@@ -29,7 +29,6 @@ namespace Managers
         private void Start()
         {
             InitSpawnZombie();
-            ZombieManager.Instance.Initialize(sceneInitManager);
         }
 
         private void InitSpawnZombie()

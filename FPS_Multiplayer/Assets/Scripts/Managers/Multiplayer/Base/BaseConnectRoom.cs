@@ -23,9 +23,9 @@ namespace Managers.Multiplayer.Base
         [SerializeField] private Button btnInteract;
 
         private readonly RoomOptions roomOptions = new() { MaxPlayers = 4 };
-        
-        protected readonly MultiplayerData MultiplayerData = new();
-        protected string RoomName, PlayerName;
+
+        private readonly MultiplayerData multiplayerData = new();
+        private string roomName, playerName;
 
         protected Button BtnInteract => btnInteract;
 
@@ -36,18 +36,45 @@ namespace Managers.Multiplayer.Base
 
         protected void OnClickRoomInteract()
         {
-            RoomName = inputRoomName.text;
-            PlayerName = inputPlayerName.text;
+            roomName = inputRoomName.text;
+            playerName = inputPlayerName.text;
             
             switch (windowType)
             {
                 case ModalWindowType.CreateRoom:
-                    PhotonNetwork.CreateRoom(RoomName, roomOptions);
+                    PhotonNetwork.CreateRoom(roomName, roomOptions);
                     break;
                 case ModalWindowType.JoinRoom:
-                    PhotonNetwork.JoinRoom(RoomName);
+                    PhotonNetwork.JoinRoom(roomName);
                     break;
             }
+        }
+        
+        // ReSharper disable Unity.PerformanceAnalysis
+        public override void OnCreatedRoom()
+        {
+            base.OnCreatedRoom();
+            Debug.Log("Room created successfully.");
+        }
+        
+        // ReSharper disable Unity.PerformanceAnalysis
+        public override void OnJoinedRoom()
+        {
+            base.OnJoinedRoom();
+            Debug.Log("Joined room successfully.");
+            
+            multiplayerData.IsMasterClient = PhotonNetwork.IsMasterClient;
+            multiplayerData.PlayerName = playerName;
+            multiplayerData.RoomName = roomName;
+
+            GameConnectManager.Instance.MultiplayerData = multiplayerData;
+            
+            PhotonNetwork.LoadLevel(1);
+        }
+        
+        public override void OnCreateRoomFailed(short returnCode, string message)
+        {
+            Debug.LogError($"Room creation failed: {message}");
         }
     }
 }

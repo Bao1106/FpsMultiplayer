@@ -11,8 +11,10 @@ namespace UI_Components.Component.Image
     {
         [Inject] private IEntity entity;
         
-        protected override void Start()
+        protected override async void Start()
         {
+            await StaticEvents.SpawnPlayerCompleted.Task;
+            
             base.Start();
             ValueImage.enabled = false;
             

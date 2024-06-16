@@ -28,9 +28,8 @@ namespace Entities.Entity
 
         private async void Start()
         {
-            Injector.Instance.InjectSingleField(this, typeof(IEntity));
-            
             await sceneInit.SceneInitTask;
+            Injector.Instance.InjectSingleField(this, typeof(IEntity));
             
             var zombie = GetComponent<Zombie>();
             ZombieManager.Instance.OnInjectPlayerSensor(zombie.zombieName, OnUpdateSensor);

@@ -1,9 +1,10 @@
-﻿using Services;
+﻿using System.Threading.Tasks;
+using Services;
 
 namespace Events
 {
     public abstract class StaticEvents
     {
-        public static bool IsUserInRange;
+        public static readonly TaskCompletionSource<bool> SpawnPlayerCompleted = new ();
     }
 }

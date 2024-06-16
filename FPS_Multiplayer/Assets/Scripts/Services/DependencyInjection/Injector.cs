@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Events;
 using Services.Utils;
 using UnityEngine;
 
@@ -36,8 +37,9 @@ namespace Services.DependencyInjection
         private const BindingFlags _bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         private readonly Dictionary<string, object> registry = new();
 
-        protected override void Awake()
+        protected override async void Awake()
         {
+            await StaticEvents.SpawnPlayerCompleted.Task;
             base.Awake();
 
             InitializeProvider();
