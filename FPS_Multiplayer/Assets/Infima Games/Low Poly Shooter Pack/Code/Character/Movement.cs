@@ -197,6 +197,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
         /// Moves the camera to the character, processes jumping and plays sounds every frame.
         protected override void Update()
         {
+            if (!photonView.IsMine) return;
+            
             //Get the equipped weapon!
             equippedWeapon = playerCharacter.GetInventory().GetEquipped();
 
@@ -223,6 +225,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
         /// </summary>
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
+            if (!photonView.IsMine) return;
+            
             //Zero out the upward velocity if the character hits the ceiling.
             if (hit.moveDirection.y > 0.0f && velocity.y > 0.0f)
                 velocity.y = 0.0f;

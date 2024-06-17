@@ -1,5 +1,6 @@
 ﻿//Copyright 2022, Infima Games. All Rights Reserved.
 
+using Photon.Pun;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
@@ -7,7 +8,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
     /// <summary>
     /// Player Interface.
     /// </summary>
-    public class CanvasSpawner : MonoBehaviour
+    public class CanvasSpawner : MonoBehaviourPunCallbacks
     {
         #region FIELDS SERIALIZED
 
@@ -30,6 +31,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
         /// </summary>
         private void Awake()
         {
+            
             //Spawn Interface.
             Instantiate(canvasPrefab);
             //Spawn Quality Settings Menu.

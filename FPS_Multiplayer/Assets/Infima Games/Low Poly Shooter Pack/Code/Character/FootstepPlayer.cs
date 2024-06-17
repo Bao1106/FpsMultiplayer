@@ -2,6 +2,7 @@
 
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Utilities;
 using InfimaGames.LowPolyShooterPack;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
@@ -11,7 +12,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
     /// We have this a separate component so as to make sure that it can be super easily removed, and replaced
     /// for a more custom implementation, as our setup is quite basic at the moment.
     /// </summary>
-    public class FootstepPlayer : MonoBehaviour
+    public class FootstepPlayer : MonoBehaviourPunCallbacks
     {
         #region FIELDS SERIALIZED
         
@@ -68,6 +69,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
         /// </summary>
         private void Update()
         {
+            if (!photonView.IsMine) return;
+            
             //Check for missing references.
             if (characterAnimator == null || movementBehaviour == null || audioSource == null)
             {

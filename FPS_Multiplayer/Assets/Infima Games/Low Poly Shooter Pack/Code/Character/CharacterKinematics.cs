@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Utilities;
 using InfimaGames.LowPolyShooterPack;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
@@ -11,7 +12,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
     /// Handles all the Inverse Kinematics needed for our Character.
     /// Very important. Uses Unity's IK code.
     /// </summary>
-    public class CharacterKinematics : MonoBehaviour
+    public class CharacterKinematics : MonoBehaviourPunCallbacks
     {
         #region FIELDS SERIALIZED
 
@@ -107,6 +108,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
         /// </summary>
         private void Update()
         {
+            if(!photonView.IsMine) return;
+            
             //Get Left Constraint Alpha.
             alphaLeft = characterAnimator.GetFloat(AHashes.AlphaIKHandLeft);
             //Get Right Constraint Alpha.
@@ -118,6 +121,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
         /// </summary>
         private void LateUpdate()
         {
+            if(!photonView.IsMine) return;
+            
             //Check References.
             if (characterAnimator == null)
             {

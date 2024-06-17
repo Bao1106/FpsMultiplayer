@@ -41,7 +41,8 @@ namespace Managers
             var randomZ = Random.Range(-size.z / 2, size.z / 2);
             var randomPos = new Vector3(randomX, prefabPlayer.transform.position.y, randomZ);
 
-            PhotonNetwork.Instantiate(prefabPlayer.name, randomPos, Quaternion.identity);
+            var player = PhotonNetwork
+                .Instantiate(prefabPlayer.name, randomPos, Quaternion.identity);
             
             StaticEvents.SpawnPlayerCompleted.SetResult(true);
             ZombieManager.Instance.Initialize(this);

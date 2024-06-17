@@ -4,7 +4,6 @@ using System;
 using System.Collections;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Utilities;
 using Infima_Games.Low_Poly_Shooter_Pack.Code.Weapons;
-using InfimaGames.LowPolyShooterPack;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
@@ -61,8 +60,9 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		[SerializeField]
 		private GameObject knife;
 
-		[Title(label: "Cameras")]
-
+		[Title(label: "Cameras")] [Tooltip("Parent Camera.")] [SerializeField]
+		private GameObject cameraParent;
+		
 		[Tooltip("Normal Camera.")]
 		[SerializeField]
 		private UnityEngine.Camera cameraWorld;
@@ -312,6 +312,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		protected override void Start()
 		{
+			cameraParent.SetActive(photonView.IsMine);
+			
 			//Max out the grenades.
 			grenadeCount = grenadeTotal;
 			
@@ -332,6 +334,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		protected override void Update()
 		{
+			if(!photonView.IsMine) return;
+			
 			//Match Aim.
 			aiming = holdingButtonAim && CanAim();
 			//Match Run.

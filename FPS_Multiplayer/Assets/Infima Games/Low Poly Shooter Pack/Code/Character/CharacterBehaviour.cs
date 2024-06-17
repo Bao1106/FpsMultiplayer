@@ -1,6 +1,7 @@
 ﻿//Copyright 2022, Infima Games. All Rights Reserved.
 
 using InfimaGames.LowPolyShooterPack;
+using Photon.Pun;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
@@ -8,7 +9,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
     /// <summary>
     /// Character Abstract Behaviour.
     /// </summary>
-    public abstract class CharacterBehaviour : MonoBehaviour
+    public abstract class CharacterBehaviour : MonoBehaviourPunCallbacks
     {
         #region UNITY
 

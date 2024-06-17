@@ -1,5 +1,6 @@
 ﻿//Copyright 2022, Infima Games. All Rights Reserved.
 
+using Photon.Pun;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
@@ -7,7 +8,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
     /// <summary>
     /// Abstract movement class. Handles interactions with the main movement component.
     /// </summary>
-    public abstract class MovementBehaviour : MonoBehaviour
+    public abstract class MovementBehaviour : MonoBehaviourPunCallbacks
     {
         #region UNITY
 
