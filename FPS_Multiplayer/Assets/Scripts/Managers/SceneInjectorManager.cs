@@ -28,10 +28,12 @@ namespace Managers
 
         private void Start()
         {
-            InitSpawnZombie();
+            SpawnPlayer();
+            SpawnZombie();
         }
 
-        private void InitSpawnZombie()
+    #region Zombie
+        private void SpawnZombie()
         {
             settings.GetPlaneSize();
             var rate = settings.GetZombieInitRate(GameMode.Single);
@@ -43,7 +45,7 @@ namespace Managers
                 
                 ZombieManager.Instance.StoreZombies(zombie);
             }
-            ZombieManager.Instance.InitZombiePlayerSensor();
+            ZombieManager.Instance.UpdateZombieSensors();
         }
         
         private void OnRespawn(float respawnRate)
@@ -54,5 +56,16 @@ namespace Managers
                 zombie.EnemyHealth.Value = settings.zombieHealth;
             }
         }
+    #endregion
+
+    #region Player
+
+        private void SpawnPlayer()
+        {
+            PlayerManager.Instance.InitPlayer(SceneInitManager);
+        }
+
+    #endregion
+        
     }
 }

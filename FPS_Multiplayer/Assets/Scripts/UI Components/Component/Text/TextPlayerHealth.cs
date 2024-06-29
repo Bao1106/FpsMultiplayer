@@ -1,7 +1,9 @@
 using Events;
 using Interfaces;
+using Managers;
 using Services.DependencyInjection;
 using UI_Components.Base;
+using UnityEngine;
 
 namespace UI_Components.Component.Text
 {
@@ -11,15 +13,29 @@ namespace UI_Components.Component.Text
         
         protected override async void Start()
         {
-            await StaticEvents.SpawnPlayerCompleted.Task;
-            
             base.Start();
-            Injector.Instance.InjectSingleField(this, typeof(IEntity));
             
+            var playerName = PlayerManager.Instance.PlayerData.PlayerName;
+            if(PlayerManager.Instance.PlayerData.IsMasterClient)
+            {
+                await StaticEvents.SpawnPlayerCompleted.Task;
+                
+                Injector.Instance.InjectSingleField(this, typeof(IEntity));
+                OnAddListener();
+            }
+            else
+            {
+                entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), playerName);
+                OnAddListener();
+            }
+        }
+
+        private void OnAddListener()
+        {
             entity.EntityHealth.AddListener(UpdateValue);
             UpdateValue(entity.EntityHealth.Value);
         }
-
+        
         private void UpdateValue(int health)
         {
             ValueText.text = $"HEALTH: {health}";

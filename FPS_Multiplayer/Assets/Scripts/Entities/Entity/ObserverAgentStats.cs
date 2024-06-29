@@ -28,9 +28,22 @@ namespace Entities.Entity
 
         private async void Start()
         {
-            await sceneInit.SceneInitTask;
-            Injector.Instance.InjectSingleField(this, typeof(IEntity));
-            
+            if (PlayerManager.Instance.PlayerData.IsMasterClient)
+            {
+                await sceneInit.SceneInitTask;
+                Injector.Instance.InjectSingleField(this, typeof(IEntity));
+                OnAddZombieListener();
+            }
+            else
+            {
+                var playerName = PlayerManager.Instance.PlayerData.PlayerName;
+                entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), playerName);
+                //OnAddZombieListener();
+            }
+        }
+
+        private void OnAddZombieListener()
+        {
             var zombie = GetComponent<Zombie>();
             ZombieManager.Instance.OnInjectPlayerSensor(zombie.zombieName, OnUpdateSensor);
             

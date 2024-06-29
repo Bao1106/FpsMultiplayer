@@ -27,4 +27,9 @@ namespace Enums
         CreateRoom = 6,
         JoinRoom = 7
     }
+    
+    public enum EventCode : byte
+    {
+        PlayerSpawned = 1,
+    }
 }

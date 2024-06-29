@@ -6,6 +6,7 @@ using Services;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Photon.Pun;
 
 namespace SO
 {
@@ -51,7 +52,7 @@ namespace SO
             var randomZ = Random.Range(-planeSize.z / 2, planeSize.z / 2);
             var randomPos = new Vector3(randomX, prefab.transform.position.y, randomZ);
             
-            var zombie = Instantiate(prefab, randomPos, Quaternion.identity).GetComponent<Zombie>();
+            var zombie = PhotonNetwork.Instantiate(prefab.name, randomPos, Quaternion.identity).GetComponent<Zombie>();
             zombie.EnemyHealth = new Observer<int>(zombieHealth);
             zombie.EnemyHealth.Invoke();
 

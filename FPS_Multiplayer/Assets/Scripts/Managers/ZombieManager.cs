@@ -41,7 +41,7 @@ namespace Managers
             lstZombie.Add(zombie);
         }
         
-        public async void InitZombiePlayerSensor()
+        public async void UpdateZombieSensors()
         {
             await taskCompletion.Task;
             foreach (var zombie in lstZombie)
@@ -56,6 +56,7 @@ namespace Managers
         {
             var id = lstZombie.FindIndex(_ => _.zombieName.Equals(enemyName));
             lstZombie[id].PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), enemyName);
+            lstZombie[id].PlayerSensor.UpdatePlayerList(PlayerManager.Instance.Players.Values.ToList());
             lstZombie[id].PlayerSensor.IsUserInRange.AddListener(callback);
         }
 

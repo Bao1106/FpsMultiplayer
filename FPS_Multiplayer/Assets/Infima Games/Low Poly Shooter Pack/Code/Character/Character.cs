@@ -1028,6 +1028,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryFire(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1086,6 +1088,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryPlayReload(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1110,6 +1114,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryInspect(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1133,6 +1139,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryAiming(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1166,6 +1174,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryHolster(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+            
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1202,6 +1212,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryThrowGrenade(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1223,6 +1235,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryMelee(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1243,6 +1257,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryRun(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1276,6 +1292,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryJump(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1295,6 +1313,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnTryInventoryNext(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Block while the cursor is unlocked.
 			if (!cursorLocked)
 				return;
@@ -1326,6 +1346,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		
 		public void OnLockCursor(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Switch.
 			switch (context)
 			{
@@ -1344,6 +1366,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnMove(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Read.
 			axisMovement = cursorLocked ? context.ReadValue<Vector2>() : default;
 		}
@@ -1352,6 +1376,8 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Character
 		/// </summary>
 		public void OnLook(InputAction.CallbackContext context)
 		{
+			if (!photonView.IsMine) return;
+			
 			//Read.
 			axisLook = cursorLocked ? context.ReadValue<Vector2>() : default;
 

@@ -2579,10 +2579,10 @@ MonoBehaviour:
   acceleration: 7
   accelerationInAir: 1.7
   deceleration: 11
-  speedWalking: 3
-  speedAiming: 1.5
-  speedCrouching: 1
-  speedRunning: 5
+  speedWalking: 4
+  speedAiming: 3.5
+  speedCrouching: 2
+  speedRunning: 6
   walkingMultiplierForward: 1
   walkingMultiplierSideways: 0.9
   walkingMultiplierBackwards: 0.9

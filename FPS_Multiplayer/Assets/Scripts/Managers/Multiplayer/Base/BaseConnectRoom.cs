@@ -1,8 +1,7 @@
-﻿using System;
-using Enums;
+﻿using Enums;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-using Services.DependencyInjection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,15 +28,12 @@ namespace Managers.Multiplayer.Base
 
         protected Button BtnInteract => btnInteract;
 
-        private void Awake()
-        {
-            DontDestroyOnLoad(this);
-        }
-
         protected void OnClickRoomInteract()
         {
             roomName = inputRoomName.text;
             playerName = inputPlayerName.text;
+
+            PhotonNetwork.NickName = playerName;
             
             switch (windowType)
             {
@@ -48,6 +44,12 @@ namespace Managers.Multiplayer.Base
                     PhotonNetwork.JoinRoom(roomName);
                     break;
             }
+            
+            multiplayerData.IsMasterClient = PhotonNetwork.IsMasterClient;
+            multiplayerData.PlayerName = playerName;
+            multiplayerData.RoomName = roomName;
+
+            GameContainer.Instance.MultiplayerData = multiplayerData;
         }
         
         // ReSharper disable Unity.PerformanceAnalysis
@@ -62,13 +64,13 @@ namespace Managers.Multiplayer.Base
         {
             base.OnJoinedRoom();
             Debug.Log("Joined room successfully.");
-            
-            multiplayerData.IsMasterClient = PhotonNetwork.IsMasterClient;
-            multiplayerData.PlayerName = playerName;
-            multiplayerData.RoomName = roomName;
 
-            GameConnectManager.Instance.MultiplayerData = multiplayerData;
-            
+            var properties = new Hashtable
+            {
+                ["Nickname"] = PhotonNetwork.NickName
+            };
+
+            PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
             PhotonNetwork.LoadLevel(1);
         }
         
