@@ -6,7 +6,7 @@ namespace Managers
 {
     public class GameConnectManager : MonoBehaviourPunCallbacks
     {
-        public override void OnPlayerEnteredRoom(Player newPlayer)
+        /*public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             base.OnPlayerEnteredRoom(newPlayer);
             
@@ -14,8 +14,8 @@ namespace Managers
             {
                 var nickname = (string)playerName;
                 Debug.Log($"New player joined: {nickname}");
-                PlayerManager.Instance.OnPlayerJoined(nickname);
+                //PlayerManager.Instance.OnPlayerJoined(nickname);
             }
-        }
+        }*/
     }
 }

@@ -50,6 +50,13 @@ namespace Managers.Multiplayer.Base
             multiplayerData.RoomName = roomName;
 
             GameContainer.Instance.MultiplayerData = multiplayerData;
+            
+            var properties = new Hashtable
+            {
+                ["Nickname"] = PhotonNetwork.NickName
+            };
+            
+            PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
         }
         
         // ReSharper disable Unity.PerformanceAnalysis
@@ -64,13 +71,11 @@ namespace Managers.Multiplayer.Base
         {
             base.OnJoinedRoom();
             Debug.Log("Joined room successfully.");
-
-            var properties = new Hashtable
-            {
-                ["Nickname"] = PhotonNetwork.NickName
-            };
-
-            PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+            
+            var syncManagerObj = new GameObject("PlayerSyncManager");
+            syncManagerObj.AddComponent<PlayerSyncManager>();
+            DontDestroyOnLoad(syncManagerObj);
+            
             PhotonNetwork.LoadLevel(1);
         }
         

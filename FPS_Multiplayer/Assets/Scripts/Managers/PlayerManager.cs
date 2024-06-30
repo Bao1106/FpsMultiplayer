@@ -21,6 +21,7 @@ namespace Managers
         private Vector3 GetSpawnPointSize() => spawnPoint.GetComponent<Renderer>().bounds.size;
         private MultiplayerData playerData;
         private readonly Dictionary<string, GamePlayer> players = new ();
+        private GamePlayer player;
         
         public IReadOnlyDictionary<string, GamePlayer> Players => players;
         public MultiplayerData PlayerData => playerData;
@@ -42,10 +43,9 @@ namespace Managers
         {
             var randomPos = CalculateRandomSpawnPosition();
 
-            var player = PhotonNetwork
+            player = PhotonNetwork
                 .Instantiate(prefabPlayer.name, randomPos, Quaternion.identity)
                 .GetComponent<GamePlayer>();
-            players[PlayerData.PlayerName] = player;
 
             if (playerData.IsMasterClient)
             {
@@ -53,7 +53,6 @@ namespace Managers
                 ZombieManager.Instance.Initialize(initManager);
             }
             
-            Injector.Instance.RegisterProvider(player, PlayerData.PlayerName);
             PhotonNetwork.RaiseEvent((byte)EventCode.PlayerSpawned, PlayerData.PlayerName, RaiseEventOptions.Default, SendOptions.SendReliable);
         }
         
@@ -61,8 +60,9 @@ namespace Managers
         {
             if (!players.ContainsKey(playerName))
             {
-                var player = FindObjectsOfType<GamePlayer>().FirstOrDefault(p => p.PhotonView.Owner.NickName == playerName);
-                if (player != null)
+                /*player = GetComponents<GamePlayer>().FirstOrDefault(p => p.PhotonView.Owner.NickName == playerName);
+                player = GetComponent<PhotonView>()*/
+                if (player != null && player.PhotonView.Owner.NickName.Equals(playerName))
                 {
                     players[playerName] = player;
                     Injector.Instance.RegisterProvider(player, playerName);
