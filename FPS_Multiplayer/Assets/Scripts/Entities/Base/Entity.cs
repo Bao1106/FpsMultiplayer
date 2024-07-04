@@ -11,7 +11,7 @@ namespace Entities.Base
         public CharacterController CharacterController { get; set; }
         public Observer<int> EntityHealth { get; protected set; }
         public Observer<bool> IsDamaged { get; protected set; }
-
+        
         [Provide]
         public IEntity ProviderEntity()
         {

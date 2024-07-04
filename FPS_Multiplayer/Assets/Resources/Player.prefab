@@ -2391,14 +2391,14 @@ GameObject:
   - component: {fileID: 7462619884820174766}
   - component: {fileID: 5811615464097515781}
   - component: {fileID: 5704232075339836149}
-  - component: {fileID: 5746975365802137721}
   - component: {fileID: 8692774774834606074}
   - component: {fileID: 3722047947117249982}
   - component: {fileID: 6029295720273193203}
-  - component: {fileID: 6769953415740899958}
-  - component: {fileID: 8814890086093559133}
   - component: {fileID: 4264314310336362532}
   - component: {fileID: 4792012874525000097}
+  - component: {fileID: 6769953415740899958}
+  - component: {fileID: 8814890086093559133}
+  - component: {fileID: 5746975365802137721}
   - component: {fileID: 3299627840937838607}
   - component: {fileID: 4747731559727247718}
   m_Layer: 7
@@ -2551,19 +2551,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5746975365802137721
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039458162795903490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10ce0fd92f8bc12429da2a8b84364f9d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackConfig: {fileID: 11400000, guid: 7a9740a2879799548b5fe167d0c6d6c7, type: 2}
 --- !u!114 &8692774774834606074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2661,35 +2648,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 058ad0f0e88b6054990c6e98008ae4ea, type: 3}
   holdToRun: 1
   holdToAim: 1
---- !u!114 &6769953415740899958
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039458162795903490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2bd74ba84b94cd4bbb9b189a5e89fba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvasPrefab: {fileID: 5393623835024644669, guid: 48d7771c50bd625489d38055025597a3,
-    type: 3}
-  qualitySettingsPrefab: {fileID: 5965040680208419700, guid: 458b1dae88c7baf46a163b218ce42a30,
-    type: 3}
---- !u!114 &8814890086093559133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2039458162795903490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e55e7a428d82413e839adb23b9351c98, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  increment: 0.1
 --- !u!114 &4264314310336362532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3120,6 +3078,50 @@ MonoBehaviour:
   - {fileID: 1633696169376432867}
   hint: {fileID: 0}
   weightHint: 0
+--- !u!114 &6769953415740899958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039458162795903490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2bd74ba84b94cd4bbb9b189a5e89fba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasPrefab: {fileID: 5393623835024644669, guid: 48d7771c50bd625489d38055025597a3,
+    type: 3}
+  qualitySettingsPrefab: {fileID: 5965040680208419700, guid: 458b1dae88c7baf46a163b218ce42a30,
+    type: 3}
+  player: {fileID: 5746975365802137721}
+--- !u!114 &8814890086093559133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039458162795903490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55e7a428d82413e839adb23b9351c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  increment: 0.1
+--- !u!114 &5746975365802137721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2039458162795903490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ce0fd92f8bc12429da2a8b84364f9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackConfig: {fileID: 11400000, guid: 7a9740a2879799548b5fe167d0c6d6c7, type: 2}
+  canvasSpawner: {fileID: 6769953415740899958}
 --- !u!114 &3299627840937838607
 MonoBehaviour:
   m_ObjectHideFlags: 0

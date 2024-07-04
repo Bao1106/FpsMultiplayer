@@ -33,11 +33,21 @@ namespace Managers.Multiplayer
         {
             foreach (var player in PhotonNetwork.PlayerList)
             {
+                Debug.LogError(PhotonNetwork.PlayerList.Length);
                 if (player.CustomProperties.TryGetValue("Nickname", out var nicknameObject))
                 {
                     var nickname = (string)nicknameObject;
+
+                    if (GameContainer.Instance.RegisterPlayers.ContainsKey(nickname))
+                        return;
                     Debug.Log($"Synced player: {nickname}");
+                    
+                    PlayerManager.Instance.InitPlayer(nickname);
                     PlayerManager.Instance.OnPlayerJoined(nickname);
+
+                    GameContainer.Instance.RegisterPlayers.TryAdd(nickname, true);
+                    
+                    if(!PhotonNetwork.IsMasterClient) SceneInjectorManager.Instance.OnInject();
                 }
             }
         }
@@ -48,7 +58,6 @@ namespace Managers.Multiplayer
             {
                 var nickname = (string)nicknameObject;
                 Debug.Log($"New player joined: {nickname}");
-                GameContainer.Instance.playersName.Add(nickname);
                 
                 //PlayerManager.Instance.OnPlayerJoined(nickname);
             }

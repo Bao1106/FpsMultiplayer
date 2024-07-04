@@ -1,7 +1,9 @@
 using Events;
 using Interfaces;
 using Managers;
+using Photon.Pun;
 using Services.DependencyInjection;
+using TMPro;
 using UI_Components.Base;
 using UnityEngine;
 
@@ -9,28 +11,15 @@ namespace UI_Components.Component.Text
 {
     public class TextPlayerHealth : BaseText
     {
-        [Inject] private IEntity entity;
-        
-        protected override async void Start()
+        private IEntity entity;
+
+        public void Initialize(string entityName)
         {
-            base.Start();
-            
-            var playerName = PlayerManager.Instance.PlayerData.PlayerName;
-            if(PlayerManager.Instance.PlayerData.IsMasterClient)
-            {
-                await StaticEvents.SpawnPlayerCompleted.Task;
-                
-                Injector.Instance.InjectSingleField(this, typeof(IEntity));
-                OnAddListener();
-            }
-            else
-            {
-                entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), playerName);
-                OnAddListener();
-            }
+            entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), entityName);
+            if (ValueText == null) ValueText = GetComponent<TMP_Text>();
         }
 
-        private void OnAddListener()
+        public void OnAddListener()
         {
             entity.EntityHealth.AddListener(UpdateValue);
             UpdateValue(entity.EntityHealth.Value);

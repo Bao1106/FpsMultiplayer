@@ -24,32 +24,25 @@ namespace Managers
         [SerializeField] private int defaultCapacity;
 
         private readonly Dictionary<GameMode, IObjectPool<Zombie>> pools = new();
-        private readonly TaskCompletionSource<bool> taskCompletion = new ();
         private readonly GameMode gameMode = GameMode.Single;
         private ISceneInit sceneInit;
 
         public static UnityAction<float> OnGetRespawnRate;
-        
-        public void Initialize(ISceneInit manager)
-        {
-            sceneInit = manager;
-            taskCompletion.SetResult(true);
-        }
 
         public void StoreZombies(Zombie zombie)
         {
             lstZombie.Add(zombie);
         }
         
-        public async void UpdateZombieSensors()
+        public void UpdateZombieSensors(string playerName)
         {
-            await taskCompletion.Task;
             foreach (var zombie in lstZombie)
             {
                 Injector.Instance.RegisterProvider(zombie.GetSensor(), zombie.zombieName);
+
+                var observer = zombie.GetComponent<ObserverAgentStats>();
+                observer.OnInjectListener(zombie, playerName);
             }
-            
-            sceneInit.InitComplete();
         }
 
         public void OnInjectPlayerSensor(string enemyName, UnityAction<string, bool> callback)

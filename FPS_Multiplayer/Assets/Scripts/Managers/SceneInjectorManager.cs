@@ -1,6 +1,7 @@
 ﻿using System;
 using Enums;
 using GOAP.Behaviours;
+using Managers.Multiplayer;
 using Services.DependencyInjection;
 using Services.Utils;
 using SO;
@@ -28,7 +29,6 @@ namespace Managers
 
         private void Start()
         {
-            SpawnPlayer();
             SpawnZombie();
         }
 
@@ -45,7 +45,8 @@ namespace Managers
                 
                 ZombieManager.Instance.StoreZombies(zombie);
             }
-            ZombieManager.Instance.UpdateZombieSensors();
+
+            OnInject();
         }
         
         private void OnRespawn(float respawnRate)
@@ -58,14 +59,12 @@ namespace Managers
         }
     #endregion
 
-    #region Player
-
-        private void SpawnPlayer()
+        public void OnInject()
         {
-            PlayerManager.Instance.InitPlayer(SceneInitManager);
-        }
-
-    #endregion
-        
+            foreach (var player in GameContainer.Instance.RegisterPlayers)
+            {
+                ZombieManager.Instance.UpdateZombieSensors(player.Key);
+            }
+        } 
     }
 }

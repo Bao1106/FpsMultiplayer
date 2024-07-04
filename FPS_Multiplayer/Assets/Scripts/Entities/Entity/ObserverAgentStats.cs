@@ -1,5 +1,6 @@
 using Interfaces;
 using Managers;
+using Photon.Pun;
 using Services.DependencyInjection;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,7 +11,6 @@ namespace Entities.Entity
     {
         [Inject] private IEntity entity;
         
-        private ISceneInit sceneInit;
         private int agentHealth;
         private bool isUserInRange;
         private float agentVelocity =  0.1f;
@@ -21,34 +21,14 @@ namespace Entities.Entity
         public int AgentHealth => agentHealth;
         public int EntityHealth() => entity != null ? entity.EntityHealth.Value : 0;
 
-        private void Awake()
+        public void OnInjectListener(Zombie z, string playerName)
         {
-            sceneInit = SceneInjectorManager.Instance.SceneInitManager;
-        }
-
-        private async void Start()
-        {
-            if (PlayerManager.Instance.PlayerData.IsMasterClient)
-            {
-                await sceneInit.SceneInitTask;
-                Injector.Instance.InjectSingleField(this, typeof(IEntity));
-                OnAddZombieListener();
-            }
-            else
-            {
-                var playerName = PlayerManager.Instance.PlayerData.PlayerName;
-                entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), playerName);
-                //OnAddZombieListener();
-            }
-        }
-
-        private void OnAddZombieListener()
-        {
-            var zombie = GetComponent<Zombie>();
-            ZombieManager.Instance.OnInjectPlayerSensor(zombie.zombieName, OnUpdateSensor);
+            entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), playerName);
             
-            zombie.EnemyHealth.AddListener(OnObserverHealth);
-            OnObserverHealth(zombie.EnemyHealth.Value);
+            ZombieManager.Instance.OnInjectPlayerSensor(z.zombieName, OnUpdateSensor);
+            
+            z.EnemyHealth.AddListener(OnObserverHealth);
+            OnObserverHealth(z.EnemyHealth.Value);
         }
         
         private void OnUpdateSensor(string enemyName, bool userInRange)

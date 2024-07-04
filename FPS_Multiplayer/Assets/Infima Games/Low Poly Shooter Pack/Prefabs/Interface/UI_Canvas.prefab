@@ -823,6 +823,7 @@ GameObject:
   - component: {fileID: 5393623835024644608}
   - component: {fileID: 7786297501017679984}
   - component: {fileID: 3853359025209894021}
+  - component: {fileID: 2562760796135712603}
   m_Layer: 5
   m_Name: UI_Canvas
   m_TagString: Untagged
@@ -931,6 +932,20 @@ MonoBehaviour:
   canvasGroup: {fileID: 7786297501017679984}
   interpolationSpeed: 12
   cursorUnlockedAlpha: 0
+--- !u!114 &2562760796135712603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5393623835024644669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d52483ffb3e9c1841924dfa760c8ccfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: {fileID: 7145245893982418453}
+  playerGetHit: {fileID: 2760165396605471818}
 --- !u!1 &5393623835113149036
 GameObject:
   m_ObjectHideFlags: 0

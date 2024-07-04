@@ -1,7 +1,5 @@
 using System.Collections;
-using Events;
 using Interfaces;
-using Managers;
 using Services.DependencyInjection;
 using UI_Components.Base;
 using UnityEngine;
@@ -10,30 +8,17 @@ namespace UI_Components.Component.Image
 {
     public class ImgPlayerGetHit : BaseImage
     {
-        [Inject] private IEntity entity;
-        
-        protected override async void Start()
-        {
-            base.Start();
-            var playerName = PlayerManager.Instance.PlayerData.PlayerName;
+        private IEntity entity;
 
-            ValueImage.enabled = false;
-            
-            if (PlayerManager.Instance.PlayerData.IsMasterClient)
-            {
-                await StaticEvents.SpawnPlayerCompleted.Task;
-                Injector.Instance.InjectSingleField(this, typeof(IEntity));
-                OnAddListener();
-            }
-            else
-            {
-                entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), playerName);
-                OnAddListener();
-            }
+        public void Initialize(string entityName)
+        {
+            entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), entityName);
+            if (ValueImage == null) ValueImage = GetComponent<UnityEngine.UI.Image>();
         }
 
-        private void OnAddListener()
+        public void OnAddListener()
         {
+            ValueImage.enabled = false;
             entity.IsDamaged.AddListener(OnActivePanel);
         }
         

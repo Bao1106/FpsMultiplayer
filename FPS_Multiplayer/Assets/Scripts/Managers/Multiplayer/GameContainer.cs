@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Managers.Multiplayer.Base;
 using Services.Utils;
@@ -7,8 +8,7 @@ namespace Managers.Multiplayer
 {
     public class GameContainer : Singleton<GameContainer>
     {
-        public MultiplayerData MultiplayerData;
-        [HideInInspector] public List<string> playersName = new();
+        public readonly Dictionary<string, bool> RegisterPlayers = new();
         
         protected override void Awake()
         {

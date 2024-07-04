@@ -8,13 +8,6 @@ using UnityEngine.UI;
 
 namespace Managers.Multiplayer.Base
 {
-    public class MultiplayerData
-    {
-        public bool IsMasterClient;
-        public string PlayerName;
-        public string RoomName;
-    }
-    
     public class BaseConnectRoom : MonoBehaviourPunCallbacks, IConnectRoom
     {
         [SerializeField] private ModalWindowType windowType;
@@ -22,8 +15,7 @@ namespace Managers.Multiplayer.Base
         [SerializeField] private Button btnInteract;
 
         private readonly RoomOptions roomOptions = new() { MaxPlayers = 4 };
-
-        private readonly MultiplayerData multiplayerData = new();
+        
         private string roomName, playerName;
 
         protected Button BtnInteract => btnInteract;
@@ -44,12 +36,6 @@ namespace Managers.Multiplayer.Base
                     PhotonNetwork.JoinRoom(roomName);
                     break;
             }
-            
-            multiplayerData.IsMasterClient = PhotonNetwork.IsMasterClient;
-            multiplayerData.PlayerName = playerName;
-            multiplayerData.RoomName = roomName;
-
-            GameContainer.Instance.MultiplayerData = multiplayerData;
             
             var properties = new Hashtable
             {

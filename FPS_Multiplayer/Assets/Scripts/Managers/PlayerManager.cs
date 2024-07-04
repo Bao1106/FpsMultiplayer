@@ -19,17 +19,10 @@ namespace Managers
         [SerializeField] private GameObject prefabPlayer, spawnPoint;
         
         private Vector3 GetSpawnPointSize() => spawnPoint.GetComponent<Renderer>().bounds.size;
-        private MultiplayerData playerData;
         private readonly Dictionary<string, GamePlayer> players = new ();
         private GamePlayer player;
         
         public IReadOnlyDictionary<string, GamePlayer> Players => players;
-        public MultiplayerData PlayerData => playerData;
-        
-        protected override void Awake()
-        {
-            playerData = GameContainer.Instance.MultiplayerData;
-        }
         
         private Vector3 CalculateRandomSpawnPosition()
         {
@@ -39,21 +32,22 @@ namespace Managers
             return new Vector3(randomX, prefabPlayer.transform.position.y, randomZ);
         } 
         
-        public void InitPlayer(SceneInitManager initManager)
+        public void InitPlayer(string playerName)
         {
             var randomPos = CalculateRandomSpawnPosition();
 
             player = PhotonNetwork
                 .Instantiate(prefabPlayer.name, randomPos, Quaternion.identity)
                 .GetComponent<GamePlayer>();
+            player.SetupPlayerName(playerName);
 
-            if (playerData.IsMasterClient)
+            if(PhotonNetwork.IsMasterClient) StaticEvents.SpawnPlayerCompleted.SetResult(true);
+            
+            /*if (playerData.IsMasterClient)
             {
                 StaticEvents.SpawnPlayerCompleted.SetResult(true);
-                ZombieManager.Instance.Initialize(initManager);
-            }
-            
-            PhotonNetwork.RaiseEvent((byte)EventCode.PlayerSpawned, PlayerData.PlayerName, RaiseEventOptions.Default, SendOptions.SendReliable);
+                //ZombieManager.Instance.Initialize(initManager);
+            }*/
         }
         
         public void OnPlayerJoined(string playerName)
@@ -64,9 +58,11 @@ namespace Managers
                 player = GetComponent<PhotonView>()*/
                 if (player != null && player.PhotonView.Owner.NickName.Equals(playerName))
                 {
-                    players[playerName] = player;
                     Injector.Instance.RegisterProvider(player, playerName);
-                    ZombieManager.Instance.UpdateZombieSensors();
+
+                    player.InitializeCanvas();
+                    players[playerName] = player;
+                    PhotonNetwork.RaiseEvent((byte)EventCode.PlayerSpawned, playerName, RaiseEventOptions.Default, SendOptions.SendReliable);
                 }
             }
         }

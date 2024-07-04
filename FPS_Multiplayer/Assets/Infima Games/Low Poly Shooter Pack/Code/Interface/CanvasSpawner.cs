@@ -1,6 +1,8 @@
 ﻿//Copyright 2022, Infima Games. All Rights Reserved.
 
-using Photon.Pun;
+using Entities.Entity;
+using Events;
+using Managers;
 using UnityEngine;
 
 namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
@@ -8,7 +10,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
     /// <summary>
     /// Player Interface.
     /// </summary>
-    public class CanvasSpawner : MonoBehaviourPunCallbacks
+    public class CanvasSpawner : MonoBehaviour
     {
         #region FIELDS SERIALIZED
 
@@ -22,6 +24,7 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
         [SerializeField]
         private GameObject qualitySettingsPrefab;
 
+        [SerializeField] private GamePlayer player;
         #endregion
 
         #region UNITY
@@ -29,15 +32,18 @@ namespace Infima_Games.Low_Poly_Shooter_Pack.Code.Interface
         /// <summary>
         /// Awake.
         /// </summary>
-        private void Awake()
+
+        public void Initialize()
         {
-            
             //Spawn Interface.
-            Instantiate(canvasPrefab);
+            var canvas = Instantiate(canvasPrefab).GetComponent<PlayerCanvasManager>();
+            canvas.CanvasInitialize(player, player.PlayerName);
+            canvas.CanvasAddListener();
+            
             //Spawn Quality Settings Menu.
             Instantiate(qualitySettingsPrefab);
         }
-
+        
         #endregion
     }
 }
