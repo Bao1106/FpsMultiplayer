@@ -1,10 +1,11 @@
-﻿using Enums;
-using ExitGames.Client.Photon;
+﻿using System.Collections;
+using Enums;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Managers.Multiplayer.Base
 {
@@ -37,12 +38,11 @@ namespace Managers.Multiplayer.Base
                     break;
             }
             
-            var properties = new Hashtable
+            var playerProperties = new Hashtable
             {
                 ["Nickname"] = PhotonNetwork.NickName
             };
-            
-            PhotonNetwork.LocalPlayer.SetCustomProperties(properties);
+            PhotonNetwork.LocalPlayer.SetCustomProperties(playerProperties);
         }
         
         // ReSharper disable Unity.PerformanceAnalysis
@@ -62,12 +62,27 @@ namespace Managers.Multiplayer.Base
             syncManagerObj.AddComponent<PlayerSyncManager>();
             DontDestroyOnLoad(syncManagerObj);
             
-            PhotonNetwork.LoadLevel(1);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                var roomProperties = new Hashtable
+                {
+                    ["RegisterPlayers"] = GameContainer.Instance.RegisterPlayers
+                };
+                PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
+            }
+
+            StartCoroutine(LoadRoomLevel());
         }
         
         public override void OnCreateRoomFailed(short returnCode, string message)
         {
-            Debug.LogError($"Room creation failed: {message}");
+            //Debug.LogError($"Room creation failed: {message}");
         }
+
+        private IEnumerator LoadRoomLevel()
+        {
+            yield return new WaitForSeconds(0.1f);
+            PhotonNetwork.LoadLevel(1);
+        } 
     }
 }

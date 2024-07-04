@@ -37,16 +37,16 @@ namespace Services.DependencyInjection
         private const BindingFlags _bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
         private readonly Dictionary<string, object> registry = new();
 
-        protected override async void Awake()
+        /*protected override async void Awake()
         {
             await StaticEvents.SpawnPlayerCompleted.Task;
             base.Awake();
 
             InitializeProvider();
             InitializeInjector();
-        }
+        }*/
 
-        private void InitializeProvider()
+        public void InitializeProvider()
         {
             //Find all modules implementing IDependencyProvider
             var providers = FindMonoBehaviours()
@@ -58,7 +58,7 @@ namespace Services.DependencyInjection
             }
         }
         
-        private void InitializeInjector()
+        public void InitializeInjector()
         {
             //Find all injectable objects and inject their dependencies
             var injectables = FindMonoBehaviours().Where(IsInjectable);

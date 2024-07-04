@@ -41,7 +41,12 @@ namespace Managers
                 .GetComponent<GamePlayer>();
             player.SetupPlayerName(playerName);
 
-            if(PhotonNetwork.IsMasterClient) StaticEvents.SpawnPlayerCompleted.SetResult(true);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //StaticEvents.SpawnPlayerCompleted.SetResult(true);
+                Injector.Instance.InitializeProvider();
+                Injector.Instance.InitializeInjector();
+            }
             
             /*if (playerData.IsMasterClient)
             {

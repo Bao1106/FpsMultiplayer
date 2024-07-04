@@ -8,7 +8,7 @@ namespace Managers.Multiplayer
 {
     public class GameContainer : Singleton<GameContainer>
     {
-        public readonly Dictionary<string, bool> RegisterPlayers = new();
+        public Dictionary<string, bool> RegisterPlayers = new();
         
         protected override void Awake()
         {

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
@@ -8,6 +10,7 @@ namespace Managers.Multiplayer
     public class PlayerSyncManager : MonoBehaviourPunCallbacks
     {
         private readonly string sceneGameplay = "GameplayScene";
+        private readonly string registerPlayersKey = "RegisterPlayers";
         
         public override void OnEnable()
         {
@@ -33,21 +36,28 @@ namespace Managers.Multiplayer
         {
             foreach (var player in PhotonNetwork.PlayerList)
             {
-                Debug.LogError(PhotonNetwork.PlayerList.Length);
                 if (player.CustomProperties.TryGetValue("Nickname", out var nicknameObject))
                 {
                     var nickname = (string)nicknameObject;
 
-                    if (GameContainer.Instance.RegisterPlayers.ContainsKey(nickname))
-                        return;
-                    Debug.Log($"Synced player: {nickname}");
+                    if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RegisterPlayers", out var players))
+                    {
+                        GameContainer.Instance.RegisterPlayers = 
+                            players as Dictionary<string, bool> ?? new Dictionary<string, bool>();
+                        
+                        if (GameContainer.Instance.RegisterPlayers.ContainsKey(nickname)) continue;
+                        
+                        Debug.Log($"Synced player: {nickname}");
                     
-                    PlayerManager.Instance.InitPlayer(nickname);
-                    PlayerManager.Instance.OnPlayerJoined(nickname);
+                        PlayerManager.Instance.InitPlayer(nickname);
+                        PlayerManager.Instance.OnPlayerJoined(nickname);
 
-                    GameContainer.Instance.RegisterPlayers.TryAdd(nickname, true);
+                        GameContainer.Instance.RegisterPlayers.TryAdd(nickname, true);
+                        
+                        UpdatePlayersRegister();
                     
-                    if(!PhotonNetwork.IsMasterClient) SceneInjectorManager.Instance.OnInject();
+                        if(!PhotonNetwork.IsMasterClient) SceneInjectorManager.Instance.OnInject();
+                    }
                 }
             }
         }
@@ -61,6 +71,16 @@ namespace Managers.Multiplayer
                 
                 //PlayerManager.Instance.OnPlayerJoined(nickname);
             }
+        }
+
+        private void UpdatePlayersRegister()
+        {
+            var roomProperties = new Hashtable
+            {
+                ["RegisterPlayers"] = GameContainer.Instance.RegisterPlayers
+            };
+            
+            PhotonNetwork.CurrentRoom.SetCustomProperties(roomProperties);
         }
     }
 }

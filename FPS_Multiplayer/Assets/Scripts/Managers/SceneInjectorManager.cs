@@ -2,6 +2,7 @@
 using Enums;
 using GOAP.Behaviours;
 using Managers.Multiplayer;
+using Photon.Pun;
 using Services.DependencyInjection;
 using Services.Utils;
 using SO;
@@ -29,7 +30,8 @@ namespace Managers
 
         private void Start()
         {
-            SpawnZombie();
+            if(PhotonNetwork.IsMasterClient)
+                SpawnZombie();
         }
 
     #region Zombie
@@ -42,7 +44,6 @@ namespace Managers
             {
                 var zombie = ZombieManager.Spawn(settings);
                 zombie.zombieName = $"{i}_{zombie.gameObject.name}";
-                
                 ZombieManager.Instance.StoreZombies(zombie);
             }
 
