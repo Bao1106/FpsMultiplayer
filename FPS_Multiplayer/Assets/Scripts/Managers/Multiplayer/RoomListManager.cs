@@ -39,8 +39,6 @@ namespace Managers.Multiplayer
         
         public  override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
-            Debug.LogError(roomList.Count);
-            
             if (cachedRoom.Count <= 0)
             {
                 cachedRoom = roomList;

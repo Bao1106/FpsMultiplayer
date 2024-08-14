@@ -25,7 +25,7 @@ namespace Entities.Entity
         {
             entity = (IEntity)Injector.Instance.Resolve(typeof(IEntity), playerName);
             
-            ZombieManager.Instance.OnInjectPlayerSensor(z.zombieName, OnUpdateSensor);
+            ZombieManager.Instance.OnInjectPlayerSensor(z.ZombieName, OnUpdateSensor);
             
             z.EnemyHealth.AddListener(OnObserverHealth);
             OnObserverHealth(z.EnemyHealth.Value);

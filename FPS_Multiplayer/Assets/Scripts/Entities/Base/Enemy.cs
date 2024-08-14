@@ -26,7 +26,7 @@ namespace Entities.Base
         
         public Observer<int> EnemyHealth { get; set; }
 
-        public void OnDamaged(int damage)
+        public virtual void OnDamaged(int damage)
         {
             EnemyHealth.Value -= damage;
             if (EnemyHealth.Value == 0)
@@ -34,7 +34,5 @@ namespace Entities.Base
                 OnEnemyDead?.Invoke();
             }
         }
-
-        
     }
 }

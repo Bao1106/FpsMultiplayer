@@ -1,9 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Managers.Multiplayer
 {
@@ -54,9 +55,9 @@ namespace Managers.Multiplayer
 
                         GameContainer.Instance.RegisterPlayers.TryAdd(nickname, true);
                         
-                        UpdatePlayersRegister();
+                        StartCoroutine(UpdatePlayersRegister());
                     
-                        if(!PhotonNetwork.IsMasterClient) SceneInjectorManager.Instance.OnInject();
+                        if(!PhotonNetwork.IsMasterClient) SceneInitializer.Instance.OnInject();
                     }
                 }
             }
@@ -69,12 +70,14 @@ namespace Managers.Multiplayer
                 var nickname = (string)nicknameObject;
                 Debug.Log($"New player joined: {nickname}");
                 
+                ZombieManager.Instance.SyncZombiesForNewPlayer();
                 //PlayerManager.Instance.OnPlayerJoined(nickname);
             }
         }
 
-        private void UpdatePlayersRegister()
+        private IEnumerator UpdatePlayersRegister()
         {
+            yield return new WaitUntil(() => PhotonNetwork.InRoom);
             var roomProperties = new Hashtable
             {
                 ["RegisterPlayers"] = GameContainer.Instance.RegisterPlayers

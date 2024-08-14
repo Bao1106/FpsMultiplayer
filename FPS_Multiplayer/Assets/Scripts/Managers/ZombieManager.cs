@@ -3,8 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Entities.Entity;
 using Enums;
+using ExitGames.Client.Photon;
 using GOAP.Sensors;
 using Interfaces;
+using Photon.Pun;
 using Services.DependencyInjection;
 using Services.Utils;
 using SO;
@@ -16,7 +18,6 @@ namespace Managers
 {
     public class ZombieManager : Singleton<ZombieManager>
     {
-        [SerializeField] private List<Zombie> lstZombie;
         [SerializeField] private FlyweightZombieSettings setting;
         
         [SerializeField] private bool collectionCheck = true;
@@ -28,34 +29,47 @@ namespace Managers
         private ISceneInit sceneInit;
 
         public static UnityAction<float> OnGetRespawnRate;
+        public Dictionary<string, Zombie> Zombies { get; private set; } = new();
 
         public void StoreZombies(Zombie zombie)
         {
-            lstZombie.Add(zombie);
+            Zombies[zombie.ZombieName] = zombie;
+        }
+        
+        public void SyncZombiesForNewPlayer()
+        {
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("Zombies", out var zombies))
+            {
+                Zombies = zombies as Dictionary<string, Zombie> ?? new Dictionary<string, Zombie>();
+                foreach (var zombie in Zombies)
+                {
+                    zombie.Value.OnSyncHealth(zombie.Value.EnemyHealth.Value);
+                }
+            }
         }
         
         public void UpdateZombieSensors(string playerName)
         {
-            foreach (var zombie in lstZombie)
+            foreach (var zombie in Zombies)
             {
-                Injector.Instance.RegisterProvider(zombie.GetSensor(), zombie.zombieName);
+                Injector.Instance.RegisterProvider(zombie.Value.GetSensor(), zombie.Key);
 
-                var observer = zombie.GetComponent<ObserverAgentStats>();
-                observer.OnInjectListener(zombie, playerName);
+                var observer = zombie.Value.GetComponent<ObserverAgentStats>();
+                observer.OnInjectListener(zombie.Value, playerName);
             }
         }
 
         public void OnInjectPlayerSensor(string enemyName, UnityAction<string, bool> callback)
         {
-            var id = lstZombie.FindIndex(_ => _.zombieName.Equals(enemyName));
-            lstZombie[id].PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), enemyName);
-            lstZombie[id].PlayerSensor.UpdatePlayerList(PlayerManager.Instance.Players.Values.ToList());
-            lstZombie[id].PlayerSensor.IsUserInRange.AddListener(callback);
+            Zombies[enemyName].PlayerSensor = (IPlayerSensor)Injector.Instance.Resolve(typeof(IPlayerSensor), enemyName);
+            Zombies[enemyName].PlayerSensor.UpdatePlayerList(PlayerManager.Instance.Players.Values.ToList());
+            Zombies[enemyName].PlayerSensor.IsUserInRange.AddListener(callback);
         }
 
         public void CheckPool()
         {
-            var zombieReleaseCount = lstZombie
+            var zombieReleaseCount = Zombies.Values
+                .ToList()
                 .FindAll(z => !z.gameObject.activeSelf)
                 .Count;
 

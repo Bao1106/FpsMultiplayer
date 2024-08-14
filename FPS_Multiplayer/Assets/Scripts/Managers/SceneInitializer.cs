@@ -1,22 +1,16 @@
-﻿using System;
-using Enums;
-using GOAP.Behaviours;
+﻿using Enums;
 using Managers.Multiplayer;
 using Photon.Pun;
-using Services.DependencyInjection;
 using Services.Utils;
 using SO;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Managers
 {
-    public class SceneInjectorManager : Singleton<SceneInjectorManager>
+    public class SceneInitializer : Singleton<SceneInitializer>
     {
-        [SerializeField] private SceneInitManager sceneInitManager;
+        [SerializeField] private RoomSyncManager roomSyncManager;
         [SerializeField] private FlyweightZombieSettings settings;
-        
-        public SceneInitManager SceneInitManager => sceneInitManager;
         
         private void OnEnable()
         {
@@ -43,11 +37,12 @@ namespace Managers
             for (int i = 0; i < rate; i++)
             {
                 var zombie = ZombieManager.Spawn(settings);
-                zombie.zombieName = $"{i}_{zombie.gameObject.name}";
+                zombie.ZombieName = $"{i}_{zombie.gameObject.name}";
                 ZombieManager.Instance.StoreZombies(zombie);
             }
 
             OnInject();
+            roomSyncManager.OnRegisterZombies(ZombieManager.Instance.Zombies);
         }
         
         private void OnRespawn(float respawnRate)

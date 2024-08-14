@@ -642,7 +642,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletConfig: {fileID: 11400000, guid: 4def6ceb477a8ad45acbbb9c7991d39e, type: 2}
   playerSensor: {fileID: 3746198424263321028}
-  zombieName: 
 --- !u!64 &7350180262233164615
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -684,6 +683,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 9149877087749691663}
   - {fileID: 6037713847512840139}
   sceneViewId: 0
   InstantiationId: 0
